@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
-    <script src="app.js" charset="utf-8"></script>
   </head>
   <body>
     <div id="app">
@@ -42,45 +41,11 @@
       <br>
       <br>
 
-      <div class="ui very padded text container">
-        <h1 class="ui padded header">Ultimi Capitoli</h1>
-      </div>
-
-      <div style="display: none;" v-if="ready" v-for="ite in latest.channel.item" class="ui raised very padded text container segment chapter">
-        <h2 class="ui header">{{ ite.title.split(" - ")[0] }}</h2>
-        <h3>{{ ite.title.split(" - ")[1] }}</h3>
-        <div class="ui two column stackable grid">
-          <div class="column">
-            <p><i class="calendar icon"></i> {{ ite.pubDate.split(" +0000")[0] }}</p>
-          </div>
-          <div class="column">
-            <p><i class="user icon"></i> {{ ite.description.split("Uploader: ")[1].split(" - ")[0] }}</p>
-          </div>
-        </div>
+      <div class="ui raised very padded text container segment">
+        <h2 class="ui header">Pagina non trovata</h2>
+        <h3>L'URL richiesto non è stato trovato</h3>
         <br>
-        <a v-bind:href="ite.link" class="ui button" target="_blank">Leggi su MangaDex</a>
-      </div>
-
-      <div style="display: none;" v-if="ready" style="place-items: center; display: grid;" class="ui very padded text container morechapters">
-        <a href="https://mangadex.org/group/12728/ccm-translations/chapters/2/" class="ui button center">More</a>
-      </div>
-
-
-
-      <div v-if="!ready" v-for="load in loadingSize" class="ui raised very padded text container segment">
-        <div class="ui placeholder">
-          <div class="image header">
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-          <div class="paragraph">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-        </div>
+        <a href="/" class="ui button">Torna alla Home</a>
       </div>
 
       <br>

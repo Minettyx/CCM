@@ -1,5 +1,8 @@
 $(function() {
 
+  $(".chapter").show();
+  $(".morechapters").show();
+
   var app = new Vue({
     el: '#app',
     data: {
