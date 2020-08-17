@@ -17,7 +17,7 @@ $(function() {
     }
   })
 
-  $.getJSON('https://ccm.0kb.eu/api/latestv2', function(dataa) {
+  $.getJSON('https://api.minettyx.com/ccm/latestChapters', function(dataa) {
     app.latest = dataa;
     app.ready = true;
   });
