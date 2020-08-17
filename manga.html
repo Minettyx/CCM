@@ -37,7 +37,7 @@
         }
       });
 
-      $.getJSON('https://api.minettyx.com/ccm/manga?id='+12033/*window.location.pathname.split('/')[2]*/, function(dataa) {
+      $.getJSON('https://api.minettyx.com/ccm/manga?id='+window.location.pathname.split('/')[2], function(dataa) {
         app.info = dataa;
         app.ready = true;
       });
