@@ -1,3 +1,5 @@
+var ttl = 0;
+
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define([], factory);
@@ -287,7 +289,8 @@ JSZipUtils.getBinaryContent = function(path, callback, progress) {
     }
 };
 
-function compressed_img(urls, filename) {
+function compressed_img(urls, filename, btn) {
+    var perc = 0;
     var zip = new JSZip();
     var count = 0;
     var name = filename + ".zip";
@@ -317,10 +320,19 @@ function compressed_img(urls, filename) {
             	total+=p[prop].total;
                 prog+=p[prop].loaded;
             }
-            console.log(prog/total);
-            p1.value = prog/total;
+
+            $(btn).addClass("loading");
+            ttl = 1;
         });
     });
+}
+
+function dwnTtl() {
+  return ttl;
+}
+
+function setdwnTtl(val) {
+  ttl = val;
 }
 
 var p={};
