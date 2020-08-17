@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>CCM Translations</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js" integrity="sha512-8F/2JIwyPohlMVdqCmXt6A6YQ9X7MK1jHlwBJv2YeZndPs021083S2Z/mu7WZ5g0iTlGDYqelA9gQXGh1F0tUw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.css" integrity="sha512-YYS7fyqDxVE/yJ1280i8KjA+nC7wAtv2u/qkulKbdMpmp8DBWX0Wj+HtILsFyvq+fouCwCyr0hasPAz1eBlvwA==" crossorigin="anonymous" />
+    <script src="/js/menu.js" charset="utf-8"></script>
+    <script src="/js/functions.js" charset="utf-8"></script>
+    <script>
+    $(function() {
+
+      $(".mload").show();
+
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          "ready": false,
+          "info": {},
+          "manga": {}
+        }
+      });
+
+      $.getJSON('https://api.minettyx.com/ccm/chapter?id='+window.location.pathname.split('/')[2], function(dataa) {
+        app.info = dataa;
+
+        $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
+          app.manga = dataaa;
+          app.ready = true;
+        });
+      });
+
+    });
+    </script>
+  </head>
+  <body>
+    <div id="app">
+
+      <div id="menu"></div>
+
+      <br>
+      <br>
+
+      <div class="ui very padded container">
+
+        <div class="ui grid">
+          <div class="eight wide column">
+            <h1 style="display: none;" v-if="ready" class="ui padded header mload">{{ manga.manga.title }}</h1>
+            <div style="display: none;" v-if="!ready" class="ui placeholder padded header mload"><div class="header"><div class="line"></div></div></div>
+          </div>
+
+          <div class="eight wide column right aligned">
+
+            <div class="ui simple selection dropdown">
+              <input type="hidden" name="gender">
+              <i class="dropdown icon"></i>
+              <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
+              <div class="menu">
+                <div class="item" v-for="chap in manga.chapter"><a style="color: black" v-bind:href="'/chapter/'+chap.id">{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</a></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <br>
+
+
+        <img v-for="img in info.page_array" v-bind:src="info.server+info.hash+'/'+img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
+
+
+
+      </div>
+
+      <br>
+      <br>
+
+    </div>
+  </body>
+</html>
