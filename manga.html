@@ -9,8 +9,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
     <script src="/js/menu.js" charset="utf-8"></script>
+    <script src="/js/functions.js" charset="utf-8"></script>
     <script>
     $(function() {
+
+      $(".mload").show();
 
       var app = new Vue({
         el: '#app',
@@ -18,11 +21,16 @@
           "ready": false,
           "info": {
             "manga": {
-              "title": ""
-            }
-          }
+              "title": "",
+              "status": -1,
+              "author": "",
+              "artist": ""
+            },
+            "chapter": {}
+          },
+          "loadSize": [{}, {}, {}, {}, {}]
         }
-      })
+      });
 
       $.getJSON('https://api.minettyx.com/ccm/manga?id='+window.location.pathname.split('/')[2], function(dataa) {
         app.info = dataa;
@@ -31,7 +39,19 @@
 
     });
 
-
+    function status(val) {
+      if(val == 1) {
+        return "In corso";
+      } else if(val == 2) {
+        return "Finito";
+      } else if(val == 3) {
+        return "Cancellato";
+      } else if(val == 4) {
+        return "In slallo";
+      } else {
+        return "";
+      }
+    }
     </script>
   </head>
   <body>
@@ -39,14 +59,87 @@
 
       <div id="menu"></div>
 
-
       <br>
       <br>
 
       <div class="ui very padded container">
-        <h1 class="ui padded header">{{ info.manga.title }}</h1>
+        <h1 style="display: none;" v-if="ready" class="ui padded header mload">{{ info.manga.title }}</h1>
+        <div style="display: none;" v-if="!ready" class="ui placeholder padded header mload"><div class="header"><div class="line"></div></div></div>
+
+        <div class="ui grid">
+          <div class="four wide column">
+
+            <div style="display: none;" v-if="ready" class="ui card mload">
+              <div class="image">
+                <img v-bind:src="'https://mangadex.org'+info.manga.cover_url">
+              </div>
+              <div class="content">
+                <a class="header">{{ info.manga.title }}</a>
+                <div class="meta">
+                  <span class="date">{{ status(info.manga.status) }}</span>
+                </div>
+                <div class="description">
+                  Autore: {{ info.manga.author }}<br>
+                  Disegni: {{ info.manga.artist }}
+                </div>
+              </div>
+              <div class="extra content">
+                <a>
+                  <i class="file icon"></i>
+                  {{ info.ccount }} Capitoli
+                </a>
+              </div>
+            </div>
+
+            <div style="display: none;" v-if="!ready" class="ui card mload">
+              <div class="image">
+                <div class="ui placeholder">
+                  <div class="square image"></div>
+                </div>
+              </div>
+              <div class="content">
+                <div class="ui placeholder">
+                  <div class="header">
+                    <div class="long line"></div>
+                  </div>
+                  <div class="paragraph">
+                    <div class="short line"></div>
+                    <div class="short line"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="extra content">
+                <div class="ui placeholder">
+                  <div class="paragraph">
+                    <div class="very short line"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
+          </div>
+          <div class="twelve wide column">
+            <table class="ui celled table">
+              <thead>
+                <tr><th><i class="file outline icon"></i></th>
+                <th><i class="clock outline icon"></i></th>
+              </tr></thead>
+              <tbody>
+                <tr style="display: none;" v-for="chap in info.chapter" class="mload">
+                  <td data-label="Name"><a v-bind:href='"/chapter/"+chap.id'>{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</a></td>
+                  <td class="right aligned collapsing">{{timeSince(new Date(chap.timestamp*1000))}} fa</td>
+                </tr>
+
+                <tr style="display: none;" v-for="size in loadSize" v-if="!ready" class="mload">
+                  <td data-label="Name"><a><div class="ui placeholder"><div class="paragraph"><div class="line"></div></div></div></a></td>
+                  <td class="right aligned collapsing"><div class="ui placeholder"><div class="paragraph"><div class="line"></div></div></div></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
 
       </div>
 

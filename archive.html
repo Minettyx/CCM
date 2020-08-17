@@ -18,7 +18,7 @@
         el: '#app',
         data: {
           "ready": false,
-          "loadingSize": [{}, {}, {}, {}, {}, {}, {}, {}],
+          "loadingSize": [{}, {}, {}, {}, {}, {}],
           "mangas": []
         }
       })
@@ -45,7 +45,7 @@
         <h1 class="ui padded header">Archivio</h1>
 
         <div style="display: none;" v-if="ready" class="ui link cards mangas">
-          <div class="card" v-for="manga in mangas" v-bind:onclick='"window.open(\"/manga/"+manga.id+"\");"'>
+          <div class="card" v-for="manga in mangas" v-bind:onclick='"document.location.href = \"/manga/"+manga.id+"\""'>
             <div class="image">
               <img v-bind:src='manga.img'>
             </div>
