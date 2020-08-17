@@ -27,7 +27,7 @@
         }
       });
 
-      $.getJSON('https://api.minettyx.com/ccm/chapter?id='+window.location.pathname.split('/')[2], function(dataa) {
+      $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+window.location.pathname.split('/')[2], function(dataa) {
         app.info = dataa;
 
         $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
@@ -52,7 +52,7 @@
 
         <div class="ui grid">
           <div class="eight wide column">
-            <h1 style="display: none;" v-if="ready" class="ui padded header mload">{{ manga.manga.title }}</h1>
+            <a style="display: none; font-size: 2em; font-weight: bolder" v-if="ready" v-bind:href='"/manga/"+info.manga_id' class="ui padded header mload">{{ manga.manga.title }}</a>
             <div style="display: none;" v-if="!ready" class="ui placeholder padded header mload"><div class="header"><div class="line"></div></div></div>
           </div>
 
@@ -73,7 +73,7 @@
         <br>
 
 
-        <img v-for="img in info.page_array" v-bind:src="'https://api.minettyx.com/ccm/image?id='+img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
+        <img v-for="img in info.page_array" v-bind:src="img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
 
 
       </div>

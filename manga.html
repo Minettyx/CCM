@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js" integrity="sha512-y3o0Z5TJF1UsKjs/jS2CDkeHN538bWsftxO9nctODL5W40nyXIbs0Pgyu7//icrQY9m6475gLaVr39i/uh/nLA==" crossorigin="anonymous"></script>
     <script src="/js/menu.js" charset="utf-8"></script>
     <script src="/js/functions.js" charset="utf-8"></script>
+    <script src="/js/download.js" charset="utf-8"></script>
     <script>
     $(function() {
 
@@ -32,11 +34,10 @@
         }
       });
 
-      $.getJSON('https://api.minettyx.com/ccm/manga?id='+window.location.pathname.split('/')[2], function(dataa) {
+      $.getJSON('https://api.minettyx.com/ccm/manga?id='+18397/*window.location.pathname.split('/')[2]*/, function(dataa) {
         app.info = dataa;
         app.ready = true;
       });
-
     });
 
     function status(val) {
@@ -52,9 +53,20 @@
         return "";
       }
     }
+
+    function downlo(id) {
+      $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+id, function(dataaa) {
+        compressed_img(dataaa.page_array, "bundle");
+      });
+    }
+
+    function getDownload(id) {
+      return "downlo('"+id+"')";
+    }
     </script>
   </head>
   <body>
+    <iframe id="downloadframe" style="display:none;"></iframe>
     <div id="app">
 
       <div id="menu"></div>
@@ -122,12 +134,16 @@
           <div class="twelve wide column">
             <table class="ui celled table">
               <thead>
-                <tr><th><i class="file outline icon"></i></th>
-                <th class="right aligned"><i class="clock outline icon"></i></th>
-              </tr></thead>
+                <tr>
+                  <th><i class="file outline icon"></i></th>
+                  <th class="right aligned"><i class="arrow alternate circle down outline icon"></i></th>
+                  <th class="right aligned"><i class="clock outline icon"></i></th>
+                </tr>
+              </thead>
               <tbody>
                 <tr style="display: none;" v-for="chap in info.chapter" class="mload">
                   <td data-label="Name"><a v-bind:href='"/chapter/"+chap.id'>{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</a></td>
+                  <td class="right aligned collapsing"><a v-bind:onclick='getDownload(chap.id)' class="ui icon button mini"><i class="cloud download icon"></i></a></td>
                   <td class="right aligned collapsing">{{timeSince(new Date(chap.timestamp*1000))}} fa</td>
                 </tr>
 
