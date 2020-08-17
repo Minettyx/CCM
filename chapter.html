@@ -63,7 +63,7 @@
               <i class="dropdown icon"></i>
               <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
               <div class="menu">
-                <a style="color: black" v-bind:href="'/chapter/'+chap.id" v-for="chap in manga.chapter"><div class="item">{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</div></a>
+                <div class="item" v-for="chap in manga.chapter" v-bind:onclick="'window.location.href = \"'+chap.id+'\"'">{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</div>
               </div>
             </div>
 
