@@ -1,0 +1,2 @@
+/manga/*    /manga?id=:splat     200!
+/chapter/*  /chapter?id=:splat   200!

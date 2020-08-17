@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>CCM Translations</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
+    <script src="js/menu.js" charset="utf-8"></script>
+    <script>
+    $(function() {
+
+      $(".mangas").show();
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          "ready": false,
+          "loadingSize": [{}, {}, {}, {}, {}, {}, {}, {}],
+          "mangas": []
+        }
+      })
+
+      $.getJSON('https://api.minettyx.com/ccm/mangas', function(dataa) {
+        app.mangas = dataa;
+        app.ready = true;
+      });
+
+      $('.ui.icon.input').popup();
+    });
+    </script>
+  </head>
+  <body>
+    <div id="app">
+
+      <div id="menu"></div>
+
+
+      <br>
+      <br>
+
+      <div class="ui very padded container">
+        <h1 class="ui padded header">Archivio</h1>
+
+        <div style="display: none;" v-if="ready" class="ui link cards mangas">
+          <div class="card" v-for="manga in mangas" v-bind:onclick='"window.open(\"/manga/"+manga.id+"\");"'>
+            <div class="image">
+              <img v-bind:src='manga.img'>
+            </div>
+            <div class="content">
+              <div class="header">{{ manga.name }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="!ready" class="ui cards">
+          <div class="ui card" v-for="load in loadingSize">
+            <div class="image">
+              <div class="ui placeholder">
+                <div class="square image"></div>
+              </div>
+            </div>
+            <div class="content">
+              <div class="ui placeholder">
+                <div class="header">
+                  <div class="line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <br>
+      <br>
+
+    </div>
+  </body>
+</html>
