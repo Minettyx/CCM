@@ -118,7 +118,7 @@
 
             <a style="display: none" v-if="previousChapter.exist" v-bind:href="'/chapter/'+previousChapter.id" class="ui labeled icon button mload"><i class="left arrow icon"></i>Precedente</a>
 
-            <div style="display: none" class="ui selection dropdown mload" v-if="ready">
+            <div style="display: none" class="ui selection dropdown mload">
               <input type="hidden" name="gender">
               <i class="dropdown icon"></i>
               <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
