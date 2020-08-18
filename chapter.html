@@ -114,13 +114,11 @@
         <img v-for="img in info.page_array" v-bind:src="img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
 
         <div class="ui grid">
-          <div class="one wide column"></div>
-          <div class="fourteen wide column center aligned">
+          <div class="sixteen wide column center aligned">
 
-            <a v-if="previousChapter.exist" v-bind:href="'/chapter/'+previousChapter.id" class="ui labeled icon button"><i class="left arrow icon"></i>Precedente</a>
+            <a style="display: none" v-if="previousChapter.exist" v-bind:href="'/chapter/'+previousChapter.id" class="ui labeled icon button mload"><i class="left arrow icon"></i>Precedente</a>
 
-            <div style="display: none" class="ui selection dropdown mload">
-              <input type="hidden" name="gender">
+            <div style="display: none" class="ui selection dropdown mload" v-if="ready">
               <i class="dropdown icon"></i>
               <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
               <div class="menu">
@@ -128,12 +126,13 @@
               </div>
             </div>
 
-            <a v-if="nextChapter.exist" v-bind:href="'/chapter/'+nextChapter.id" class="ui right labeled icon button"><i class="right arrow icon"></i>Prossimo</a>
+            <a style="display: none" v-if="nextChapter.exist" v-bind:href="'/chapter/'+nextChapter.id" class="ui right labeled icon button mload"><i class="right arrow icon"></i>Prossimo</a>
 
           </div>
-          <div class="one wide column right aligned">
+        </div>
 
-          </div>
+        <div class="center aligned">
+
         </div>
 
       </div>
