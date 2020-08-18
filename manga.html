@@ -114,8 +114,7 @@
               </div>
               <div class="extra content">
                 <i class="file icon"></i>
-                {{ info.ccount }} Capitoli
-                <a class="ui primary button" v-bind:href="'/chapter/'+info.chapter[info.chapter.length-1]">Inizia a leggere</a>
+                <a class="ui primary button" v-bind:href="'/chapter/'+info.chapter[info.chapter.length-1].id">Inizia a leggere</a>
               </div>
             </div>
 
@@ -151,7 +150,7 @@
             <table class="ui celled table">
               <thead>
                 <tr>
-                  <th><i class="file outline icon"></i></th>
+                  <th><i class="file outline icon"></i>{{ info.ccount }}</th>
                   <th class="right aligned"><i class="arrow alternate circle down outline icon"></i></th>
                   <th class="right aligned"><i class="clock outline icon"></i></th>
                 </tr>
