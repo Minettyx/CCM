@@ -38,6 +38,9 @@
       });
 
       $.getJSON('https://api.minettyx.com/ccm/manga?id='+window.location.pathname.split('/')[2], function(dataa) {
+        if(!dataa.ok) {
+          window.location.href = "/404";
+        }
         app.info = dataa;
         app.ready = true;
       });

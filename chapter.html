@@ -28,6 +28,9 @@
       });
 
       $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+window.location.pathname.split('/')[2], function(dataa) {
+        if(!dataa.ok) {
+          window.location.href = "/404";
+        }
         app.info = dataa;
 
         $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
