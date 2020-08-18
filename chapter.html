@@ -13,21 +13,32 @@
     <script src="/js/menu.js" charset="utf-8"></script>
     <script src="/js/functions.js" charset="utf-8"></script>
     <script>
+    var app;
+    var chapterId = 964956/*window.location.pathname.split('/')[2]*/;
+
     $(function() {
 
       $(".mload").show();
 
 
-      var app = new Vue({
+       app = new Vue({
         el: '#app',
         data: {
           "ready": false,
           "info": {},
-          "manga": {}
+          "manga": {},
+          "nextChapter": {
+            "exist": false,
+            "id": 0
+          },
+          "previousChapter": {
+            "exist": false,
+            "id": 0
+          }
         }
       });
 
-      $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+window.location.pathname.split('/')[2], function(dataa) {
+      $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+chapterId, function(dataa) {
         if(!dataa.ok) {
           window.location.href = "/404";
         }
@@ -36,11 +47,35 @@
         $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
           app.manga = dataaa;
           app.ready = true;
+
+          nextChapter();
+          previousChapter();
         });
       });
 
       $('.ui.dropdown').dropdown();
     });
+
+    function nextChapter() {
+      app.manga.chapter.forEach((item, i) => {
+        if(item.id == chapterId) {
+          if(app.manga.chapter[i-1] != null) {
+            app.nextChapter.id = app.manga.chapter[i-1].id;
+            app.nextChapter.exist = true;
+          }
+        }
+      });
+    }
+    function previousChapter() {
+      app.manga.chapter.forEach((item, i) => {
+        if(item.id == chapterId) {
+          if(app.manga.chapter[i+1] != null) {
+            app.previousChapter.id = app.manga.chapter[i+1].id;
+            app.previousChapter.exist = true;
+          }
+        }
+      });
+    }
     </script>
   </head>
   <body>
@@ -78,6 +113,28 @@
 
         <img v-for="img in info.page_array" v-bind:src="img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
 
+        <div class="ui grid">
+          <div class="one wide column"></div>
+          <div class="fourteen wide column center aligned">
+
+            <a v-if="previousChapter.exist" v-bind:href="'/chapter/'+previousChapter.id" class="ui labeled icon button"><i class="left arrow icon"></i>Precedente</a>
+
+            <div style="display: none" class="ui selection dropdown mload">
+              <input type="hidden" name="gender">
+              <i class="dropdown icon"></i>
+              <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
+              <div class="menu">
+                <div class="item" v-for="chap in manga.chapter" v-bind:onclick='"document.location.href = \"/chapter/"+chap.id+"\""'>{{chap.volume ? "Vol. "+chap.volume+" " : ""}}{{chap.chapter ? "Ch. "+chap.chapter : ""}}{{chap.title ? " - "+chap.title : ""}}</div>
+              </div>
+            </div>
+
+            <a v-if="nextChapter.exist" v-bind:href="'/chapter/'+nextChapter.id" class="ui right labeled icon button"><i class="right arrow icon"></i>Prossimo</a>
+
+          </div>
+          <div class="one wide column right aligned">
+
+          </div>
+        </div>
 
       </div>
 
