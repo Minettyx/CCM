@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js" integrity="sha512-8F/2JIwyPohlMVdqCmXt6A6YQ9X7MK1jHlwBJv2YeZndPs021083S2Z/mu7WZ5g0iTlGDYqelA9gQXGh1F0tUw==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.css" integrity="sha512-YYS7fyqDxVE/yJ1280i8KjA+nC7wAtv2u/qkulKbdMpmp8DBWX0Wj+HtILsFyvq+fouCwCyr0hasPAz1eBlvwA==" crossorigin="anonymous" />
     <script src="/js/menu.js?v=3" charset="utf-8"></script>
+    <script src="/js/imageLoader.js" charset="utf-8"></script>
     <script>
     var app;
     var chapterId = window.location.pathname.split('/')[2];
@@ -42,6 +43,7 @@
           window.location.href = "/404";
         }
         app.info = dataa;
+        $.fn.imageOrder(".mangapage");
 
         $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
           app.manga = dataaa;
@@ -111,7 +113,7 @@
 
 
         <div v-for="img in info.page_array" >
-          <img style="display: none" v-bind:onload="'$(\'#imgLoad' + info.page_array.indexOf(img) + '\').hide(); $(this).show();'" v-bind:src="img" alt="" class="ui fluid image">
+          <img v-bind:order="parseInt(info.page_array.indexOf(img))+1" style="display: none" v-bind:onload="'$(\'#imgLoad' + info.page_array.indexOf(img) + '\').hide(); $(this).show();'" v-bind:src="img" alt="" class="ui fluid image mangapage">
           <div v-bind:id="'imgLoad'+info.page_array.indexOf(img)">
             <br>
             <br>
