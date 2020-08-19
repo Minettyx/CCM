@@ -11,10 +11,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js" integrity="sha512-8F/2JIwyPohlMVdqCmXt6A6YQ9X7MK1jHlwBJv2YeZndPs021083S2Z/mu7WZ5g0iTlGDYqelA9gQXGh1F0tUw==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.css" integrity="sha512-YYS7fyqDxVE/yJ1280i8KjA+nC7wAtv2u/qkulKbdMpmp8DBWX0Wj+HtILsFyvq+fouCwCyr0hasPAz1eBlvwA==" crossorigin="anonymous" />
     <script src="/js/menu.js?v=3" charset="utf-8"></script>
-    <script src="/js/functions.js" charset="utf-8"></script>
     <script>
     var app;
-    var chapterId = window.location.pathname.split('/')[2];
+    var chapterId = 1001082/*window.location.pathname.split('/')[2]*/;
 
     $(function() {
 
@@ -111,7 +110,16 @@
         <br>
 
 
-        <img v-for="img in info.page_array" v-bind:src="img" alt="" style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
+        <div v-for="img in info.page_array" >
+          <img style="display: none" v-bind:onload="'$(\'#imgLoad' + info.page_array.indexOf(img) + '\').hide(); $(this).show();'" v-bind:src="img" alt="" class="ui fluid image">
+          <div v-bind:id="'imgLoad'+info.page_array.indexOf(img)">
+            <br>
+            <br>
+            <div class="ui active centered inline loader"></div>
+            <br>
+            <br>
+          </div>
+        </div>
 
         <div class="ui grid">
           <div class="sixteen wide column center aligned">

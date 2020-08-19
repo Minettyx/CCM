@@ -30,7 +30,7 @@ function timeSince(date) {
   interval = seconds / 3600;
   if (interval > 1) {
     if(Math.floor(interval) == 1) {
-      return Math.floor(interval) + " ore";
+      return Math.floor(interval) + " ora";
     } else {
       return Math.floor(interval) + " ore";
     }
