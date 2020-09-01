@@ -27,6 +27,7 @@ function theme(name) {
 }
 function loadPage() {
   $("#app").show();
+  $("#pageloader").removeClass("active");
 }
 function tottleTheme() {
   if(getCookie("theme") == "dark") {
