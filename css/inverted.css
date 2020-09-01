@@ -15,3 +15,17 @@
 .ui.card .meta, .ui.cards>.card .meta {
   color: #b5b5b5 !important;
 }
+
+.ui.selection.dropdown {
+  background: #1b1c1d !important;
+  color: #fff !important;
+}
+
+.ui.dropdown .menu>.item {
+  background: #1b1c1d !important;
+  color: #fff !important;
+}
+
+.ui.selection.visible.dropdown>.text:not(.default) {
+  color: #fff !important;
+}
