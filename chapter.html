@@ -41,9 +41,15 @@
              "previousChapter": {
                "exist": false,
                "id": 0
-             }
+             },
+             "quality": 6
            }
          });
+
+         if(getCookie("quality")) {
+           app.quality = getCookie("quality");
+         }
+
 
          $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+chapterId, function(dataa) {
            if(!dataa.ok) {
@@ -86,6 +92,25 @@
         }
       });
     }
+
+    function quality(val) {
+      setCookie("quality", val);
+      location.reload();
+    }
+    function qualityName() {
+      if(getCookie("quality")) {
+        qual = getCookie("quality");
+        if(qual > 6 && qual < 9) {
+          return "Media";
+        } else if(qual == 9) {
+          return "Bassa";
+        } else if(qual == 6) {
+          return "Alta";
+        }
+      } else {
+        return "Alta";
+      }
+    }
     </script>
   </head>
   <body>
@@ -108,7 +133,16 @@
           <div class="eight wide column right aligned">
 
             <div style="display: none" class="ui selection dropdown mload">
-              <input type="hidden" name="gender">
+              <i class="dropdown icon"></i>
+              <div class="text">Qualità ({{qualityName()}})</div>
+              <div class="menu">
+                <div class="item" onclick='quality(6)'>Alta</div>
+                <div class="item" onclick='quality(8)'>Normale</div>
+                <div class="item" onclick='quality(9)'>Bassa</div>
+              </div>
+            </div>
+
+            <div style="display: none" class="ui selection dropdown mload">
               <i class="dropdown icon"></i>
               <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
               <div class="menu">
@@ -123,7 +157,7 @@
 
 
         <div v-for="img in info.page_array" >
-          <img v-bind:order="parseInt(info.page_array.indexOf(img))+1" style="display: none" v-bind:onload="'$(\'#imgLoad' + info.page_array.indexOf(img) + '\').hide(); $(this).show();'" v-bind:src="img" alt="" class="ui fluid image mangapage">
+          <img v-bind:order="parseInt(info.page_array.indexOf(img))+1" style="display: none" v-bind:onload="'$(\'#imgLoad' + info.page_array.indexOf(img) + '\').hide(); $(this).show();'" v-bind:src="img+'&l='+quality" alt="" class="ui fluid image mangapage">
           <div v-bind:id="'imgLoad'+info.page_array.indexOf(img)">
             <br>
             <br>
@@ -141,7 +175,6 @@
             <a style="display: none" v-if="previousChapter.exist" v-bind:href="'/chapter/'+previousChapter.id" class="ui labeled icon button mload"><i class="left arrow icon"></i>Precedente</a>
 
             <div style="display: none" class="ui selection dropdown mload">
-              <input type="hidden" name="gender">
               <i class="dropdown icon"></i>
               <div class="text">{{info.volume ? "Vol. "+info.volume+" " : ""}}{{info.chapter ? "Ch. "+info.chapter : ""}}{{info.title ? " - "+info.title : ""}}</div>
               <div class="menu">
