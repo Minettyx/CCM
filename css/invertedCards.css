@@ -1,0 +1,17 @@
+.ui.card, .ui.cards>.card {
+  background: #1b1c1d !important;
+  -webkit-box-shadow: 0 1px 3px 0 #1b1c1d, 0 0 0 1px #1b1c1d !important;
+  box-shadow: 0 1px 3px 0 #1b1c1d, 0 0 0 1px #1b1c1d !important;
+}
+
+.ui.card>.content>.header, .ui.cards>.card>.content>.header {
+  color: #fff !important;
+}
+
+.ui.card>.content>.description, .ui.cards>.card>.content>.description {
+  color: #fff !important;
+}
+
+.ui.card .meta, .ui.cards>.card .meta {
+  color: #b5b5b5 !important;
+}

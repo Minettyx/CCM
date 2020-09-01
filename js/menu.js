@@ -1,7 +1,0 @@
-$(function() {
-
-  document.getElementById("menu").innerHTML = '<div class=\"ui attached stackable menu\">\r\n  <div class=\"ui container\">\r\n    <a href=\"\/\" class=\"item\"><i class=\"home icon\"><\/i> Home\r\n    <\/a> <a href=\"\/archive\" class=\"item\"><i class=\"archive icon\"><\/i> Archivio\r\n    <\/a> <a href=\"\/staff\" class=\"item\"><i class=\"users icon\"><\/i> Staff\r\n    <\/a> <a href=\"https:\/\/mangadex.org\/group\/12728\/ccm-translations\" target=\"_blank\" class=\"item\"><i class=\"book icon\"><\/i> MangaDex\r\n    <\/a> \r\n    <div class=\"ui simple dropdown item\">\r\n      <i class=\"telegram plane icon\"><\/i> Telegram\r\n      <i class=\"dropdown icon\"><\/i> \r\n      <div class=\"menu\"><a href=\"https:\/\/t.me\/ccmtranslations\" target=\"_blank\" class=\"item\">Canale aggiornamenti<\/a> <a href=\"https:\/\/t.me\/ccmtranslationsbot\" target=\"_blank\" class=\"item\">Support bot<\/a><\/div>\r\n    <\/div>\r\n    <a href=\"https:\/\/github.com\/Minettyx\/ccm.0kb.eu\" target=\"_blank\" class=\"item\"><i class=\"github icon\"><\/i><\/a> <a href=\"https:\/\/github.com\/Minettyx\/ccm.0kb.eu\/issues\" target=\"_blank\" class=\"item\"><i class=\"exclamation circle icon\"><\/i><\/a> \r\n    <div class=\"right item\">\r\n      <div data-content=\"Work in progress\" class=\"ui disabled icon input\"><i class=\"search icon\"><\/i><input type=\"text\" placeholder=\"Search...\"><\/div>\r\n    <\/div>\r\n  <\/div>\r\n<\/div>';
-
-  $('.ui.icon.input').popup();
-
-});

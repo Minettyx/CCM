@@ -3,58 +3,66 @@
   <head>
     <meta charset="utf-8">
     <title>CCM Translations</title>
+    <!--Libs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.js" integrity="sha512-8F/2JIwyPohlMVdqCmXt6A6YQ9X7MK1jHlwBJv2YeZndPs021083S2Z/mu7WZ5g0iTlGDYqelA9gQXGh1F0tUw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.css" integrity="sha512-YYS7fyqDxVE/yJ1280i8KjA+nC7wAtv2u/qkulKbdMpmp8DBWX0Wj+HtILsFyvq+fouCwCyr0hasPAz1eBlvwA==" crossorigin="anonymous" />
-    <script src="/js/menu.js?v=3" charset="utf-8"></script>
+    <!--Scripts-->
+    <script src="/js/theme.js" charset="utf-8"></script>
     <script src="/js/imageLoader.js" charset="utf-8"></script>
-    <script>
+
+
+    <script type="text/javascript">
     var app;
     var chapterId = window.location.pathname.split('/')[2];
 
     $(function() {
+      $('#menu').load('/parts/menu.html', function() {
+        $('#footer').load('/parts/footer.html', function() {
 
-      $(".mload").show();
+          loadTheme();
+          $(".mload").show();
 
+          app = new Vue({
+           el: '#app',
+           data: {
+             "ready": false,
+             "info": {},
+             "manga": {},
+             "nextChapter": {
+               "exist": false,
+               "id": 0
+             },
+             "previousChapter": {
+               "exist": false,
+               "id": 0
+             }
+           }
+         });
 
-       app = new Vue({
-        el: '#app',
-        data: {
-          "ready": false,
-          "info": {},
-          "manga": {},
-          "nextChapter": {
-            "exist": false,
-            "id": 0
-          },
-          "previousChapter": {
-            "exist": false,
-            "id": 0
-          }
-        }
-      });
+         $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+chapterId, function(dataa) {
+           if(!dataa.ok) {
+             window.location.href = "/404";
+           }
+           app.info = dataa;
+           $.fn.imageOrder(".mangapage");
 
-      $.getJSON('https://api.minettyx.com/ccm/chapter2?id='+chapterId, function(dataa) {
-        if(!dataa.ok) {
-          window.location.href = "/404";
-        }
-        app.info = dataa;
-        $.fn.imageOrder(".mangapage");
+           $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
+             app.manga = dataaa;
+             app.ready = true;
 
-        $.getJSON('https://api.minettyx.com/ccm/manga?id='+dataa.manga_id, function(dataaa) {
-          app.manga = dataaa;
-          app.ready = true;
+             nextChapter();
+             previousChapter();
+           });
 
-          nextChapter();
-          previousChapter();
+           $('.ui.dropdown').dropdown();
+         });
         });
       });
-
-      $('.ui.dropdown').dropdown();
     });
 
     function nextChapter() {
@@ -80,7 +88,7 @@
     </script>
   </head>
   <body>
-    <div id="app">
+    <div id="app" style="display: none;">
 
       <div id="menu"></div>
 
@@ -123,6 +131,8 @@
           </div>
         </div>
 
+        <br>
+
         <div class="ui grid">
           <div class="sixteen wide column center aligned">
 
@@ -142,15 +152,13 @@
           </div>
         </div>
 
-        <div class="center aligned">
-
-        </div>
 
       </div>
 
       <br>
       <br>
 
+      <div id="footer"></div>
     </div>
   </body>
 </html>

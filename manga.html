@@ -3,55 +3,65 @@
   <head>
     <meta charset="utf-8">
     <title>CCM Translations</title>
+    <!--Libs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js" integrity="sha512-y3o0Z5TJF1UsKjs/jS2CDkeHN538bWsftxO9nctODL5W40nyXIbs0Pgyu7//icrQY9m6475gLaVr39i/uh/nLA==" crossorigin="anonymous"></script>
-    <script src="/js/menu.js?v=3" charset="utf-8"></script>
-    <script src="/js/functions.js?v=2" charset="utf-8"></script>
+    <!--Scripts-->
+    <script src="/js/theme.js" charset="utf-8"></script>
     <script src="/js/download.js?v=16" charset="utf-8"></script>
-    <script>
+    <!--Functions-->
+    <script src="/js/functions/timesince.js" charset="utf-8"></script>
 
+
+    <script type="text/javascript">
     var app;
+    var mangaId = window.location.pathname.split('/')[2];
 
     $(function() {
+      $('#menu').load('/parts/menu.html', function() {
+        $('#footer').load('/parts/footer.html', function() {
 
-      $(".mload").show();
+          loadTheme();
+          $(".mload").show();
 
-      app = new Vue({
-        el: '#app',
-        data: {
-          "ready": false,
-          "info": {
-            "manga": {
-              "title": "",
-              "status": -1,
-              "author": "",
-              "artist": ""
-            },
-            "chapter": {}
-          },
-          "loadSize": [{}, {}, {}, {}, {}]
-        }
+          app = new Vue({
+            el: '#app',
+            data: {
+              "ready": false,
+              "info": {
+                "manga": {
+                  "title": "",
+                  "status": -1,
+                  "author": "",
+                  "artist": ""
+                },
+                "chapter": {}
+              },
+              "loadSize": [{}, {}, {}, {}, {}]
+            }
+          });
+
+          $.getJSON('https://api.minettyx.com/ccm/manga?id='+mangaId, function(dataa) {
+            if(!dataa.ok) {
+              window.location.href = "/404";
+            }
+            app.info = dataa;
+            app.ready = true;
+          });
+
+          setInterval(function() {
+            if(dwnTtl() == 0){
+              $(".ui.icon.button.mini").removeClass("loading");
+            } else {
+              setdwnTtl(0);
+            }
+          }, 1000);
+        });
       });
-
-      $.getJSON('https://api.minettyx.com/ccm/manga?id='+window.location.pathname.split('/')[2], function(dataa) {
-        if(!dataa.ok) {
-          window.location.href = "/404";
-        }
-        app.info = dataa;
-        app.ready = true;
-      });
-
-      setInterval(function() {
-        if(dwnTtl() == 0){
-          $(".ui.icon.button.mini").removeClass("loading");
-        } else {
-          setdwnTtl(0);
-        }
-      }, 1000);
     });
 
     function status(val) {
@@ -80,11 +90,10 @@
     function getDownload(id) {
       return "downlo('"+id+"', this)";
     }
-
     </script>
   </head>
   <body>
-    <div id="app">
+    <div id="app" style="display: none;">
 
       <div id="menu"></div>
 
@@ -177,6 +186,7 @@
       <br>
       <br>
 
+      <div id="footer"></div>
     </div>
   </body>
 </html>

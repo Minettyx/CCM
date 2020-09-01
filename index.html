@@ -3,137 +3,41 @@
   <head>
     <meta charset="utf-8">
     <title>CCM Translations</title>
+    <!--Libs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/checkbox.min.js" integrity="sha512-xHPfIQ31nhgadqKFR79QIE1P+8QkEJRKYhbO+tNThUtBU1sOC55A29sLgjFxyekM7DUVJqapmIOx0J+G2VH8RQ==" crossorigin="anonymous"></script>
-    <script src="js/menu.js?v=3" charset="utf-8"></script>
-    <script>
-    function timeSince(date) {
+    <!--Scripts-->
+    <script src="/js/theme.js" charset="utf-8"></script>
+    <!--Functions-->
+    <script src="/js/functions/timesince.js" charset="utf-8"></script>
 
-      var seconds = Math.floor((new Date() - date) / 1000);
 
-      var interval = seconds / 31536000;
-
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " anno";
-        } else {
-          return Math.floor(interval) + " anni";
-        }
-      }
-      interval = seconds / 2592000;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " mese";
-        } else {
-          return Math.floor(interval) + " mesi";
-        }
-      }
-      interval = seconds / 86400;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " giorno";
-        } else {
-          return Math.floor(interval) + " giorni";
-        }
-      }
-      interval = seconds / 3600;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " ora";
-        } else {
-          return Math.floor(interval) + " ore";
-        }
-      }
-      interval = seconds / 60;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " minuto";
-        } else {
-          return Math.floor(interval) + " minuti";
-        }
-      }
-      if(Math.floor(interval) == 1) {
-        return Math.floor(interval) + " secondo";
-      } else {
-        return Math.floor(interval) + " secondi";
-      }
-    }
-    /* https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript */
-    function setCookie(name,value,days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-    }
-    function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-        }
-        return null;
-    }
-    function eraseCookie(name) {
-        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-    function theme(name) {
-      setCookie("theme", name, 60);
-      location.reload();
-    }
-    function loadPage() {
-      $("#app").show();
-    }
-    function tottleTheme() {
-      if(getCookie("theme") == "dark") {
-        theme("default");
-      } else {
-        theme("dark");
-      }
-    }
-    function getCounterThemeText() {
-      if(getCookie("theme") == "dark") {
-        return "Chiaro";
-      } else {
-        return "Scuro";
-      }
-    }
-    </script>
-    <script>
+    <script type="text/javascript">
     $(function() {
+      $('#menu').load('/parts/menu.html', function() {
+        $('#footer').load('/parts/footer.html', function() {
 
-      if(getCookie("theme") == "dark") {
-        $('head').append('<link rel="stylesheet" href="https://cdn.statically.io/gh/semantic-ui-forest/forest-themes/353af4ae/dist/bootswatch/v4/semantic.darkly.min.css" type="text/css" onload="loadPage()" />');
-        $("*").addClass("inverted");
-      } else {
-        $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" type="text/css" onload="loadPage()"/>');
-      }
+          loadTheme();
+          $(".mload").show();
 
-      $(".mload").show();
+          var app = new Vue({
+            el: '#app',
+            data: {
+              "ready": false,
+              "loadingSize": [{}, {}, {}, {}, {}],
+              "latest": {}
+            }
+          })
 
-      var app = new Vue({
-        el: '#app',
-        data: {
-          "ready": false,
-          "loadingSize": [{}, {}, {}, {}, {}],
-          "latest": {}
-        }
-      })
-
-      $.getJSON('https://api.minettyx.com/ccm/latestChapters', function(dataa) {
-        app.latest = dataa;
-        app.ready = true;
+          $.getJSON('https://api.minettyx.com/ccm/latestChapters', function(dataa) {
+            app.latest = dataa;
+            app.ready = true;
+          });
+        });
       });
-
-      $('.ui.icon.input').popup();
     });
     </script>
   </head>
@@ -189,14 +93,7 @@
       <br>
       <br>
 
-      <div class="ui vertical footer segment">
-        <div class="ui center aligned container">
-          <a style="display: none" class="mini ui button mload" onclick="tottleTheme()">Tema {{getCounterThemeText()}}</a>
-        </div>
-        <div class="ui center aligned container">
-          ©2020 All Rights Reserved <a href="https://minettyx.com">Minettyx</a>
-        </div>
-      </div>
+      <div id="footer"></div>
     </div>
   </body>
 </html>

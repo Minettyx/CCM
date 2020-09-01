@@ -3,37 +3,44 @@
   <head>
     <meta charset="utf-8">
     <title>CCM Translations</title>
+    <!--Libs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js" integrity="sha512-QJsj3afWlCpnQ60XzzYE8Jb3IgHIK1BcGZox9rUSmRRq3Ocz9vQ1yR80eX2/b9jfx/UuT5zYWNdrM8Te/eCMhQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/placeholder.min.css" integrity="sha512-NJ9YPRrGGZFoIO+SJ+aJ9TOXgEN2de5NFhlG1rAcIL/pc5Py5qE4HZUIlGUt5nP59KFTIh5Cxy6OhaYESeIWFw==" crossorigin="anonymous" />
-    <script src="js/menu.js?v=3" charset="utf-8"></script>
-    <script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" />
+    <!--Scripts-->
+    <script src="/js/theme.js" charset="utf-8"></script>
+
+
+    <script type="text/javascript">
     $(function() {
+      $('#menu').load('/parts/menu.html', function() {
+        $('#footer').load('/parts/footer.html', function() {
 
-      $(".mangas").show();
+          loadTheme();
+          $(".mload").show();
 
-      var app = new Vue({
-        el: '#app',
-        data: {
-          "ready": false,
-          "loadingSize": [{}, {}, {}, {}, {}, {}],
-          "mangas": []
-        }
-      })
+          var app = new Vue({
+            el: '#app',
+            data: {
+              "ready": false,
+              "loadingSize": [{}, {}, {}, {}, {}, {}],
+              "mangas": []
+            }
+          })
 
-      $.getJSON('https://api.minettyx.com/ccm/mangas', function(dataa) {
-        app.mangas = dataa;
-        app.ready = true;
+          $.getJSON('https://api.minettyx.com/ccm/mangas', function(dataa) {
+            app.mangas = dataa;
+            app.ready = true;
+          });
+        });
       });
-
-      $('.ui.icon.input').popup();
     });
     </script>
   </head>
   <body>
-    <div id="app">
+    <div id="app" style="display: none;">
 
       <div id="menu"></div>
 
@@ -44,7 +51,7 @@
       <div class="ui very padded container">
         <h1 class="ui padded header">Archivio</h1>
 
-        <div style="display: none;" v-if="ready" class="ui link cards mangas">
+        <div style="display: none;" v-if="ready" class="ui link cards mload">
           <div class="card" v-for="manga in mangas" v-bind:onclick='"document.location.href = \"/manga/"+manga.id+"\""'>
             <div class="image">
               <img v-bind:src='manga.img'>
@@ -77,6 +84,7 @@
       <br>
       <br>
 
+      <div id="footer"></div>
     </div>
   </body>
 </html>
