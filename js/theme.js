@@ -45,3 +45,9 @@ function loadTheme() {
     $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" type="text/css" onload="loadPage()"/>');
   }
 }
+
+$(function() {
+  if(getCookie("theme") == "dark") {
+    $("body").css("background", "#222");
+  }
+});
