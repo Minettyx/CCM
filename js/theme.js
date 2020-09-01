@@ -25,13 +25,9 @@ function theme(name) {
   setCookie("theme", name, 60);
   location.reload();
 }
-var loadc = 0;
 function loadPage() {
-  loadc++;
-  if(loadc == 2) {
-    $("#app").show();
-    $("#pageloader").removeClass("active");  
-  }
+  $("#app").show();
+  $("#pageloader").removeClass("active");
 }
 function tottleTheme() {
   if(getCookie("theme") == "dark") {
@@ -44,7 +40,7 @@ function loadTheme() {
   if(getCookie("theme") == "dark") {
     $('head').append('<link rel="stylesheet" href="https://cdn.statically.io/gh/semantic-ui-forest/forest-themes/353af4ae/dist/bootswatch/v4/semantic.darkly.min.css" type="text/css" onload="loadPage()" />');
     $(".ui").addClass("inverted");
-    $('head').append('<link rel="stylesheet" href="/css/inverted.css" onload="loadPage()"/>');
+    $('head').append('<link rel="stylesheet" href="/css/inverted.css">');
   } else {
     $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" type="text/css" onload="loadPage()"/>');
   }
