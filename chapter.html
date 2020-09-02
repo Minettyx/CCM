@@ -106,7 +106,7 @@
           return "Buona";
         } else if(qual == "") {
           return "Massima";
-        //old compatibility
+        //compatibility
         } else if(qual = "&w=800&l=9") {
           quality("&w=900");
           return "Normale";
@@ -116,6 +116,8 @@
         } else {
           return "Massina";
         }
+      } else {
+        return "Massina";
       }
     }
     </script>
