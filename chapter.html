@@ -106,11 +106,16 @@
           return "Buona";
         } else if(qual == "") {
           return "Massima";
+        //old compatibility
+        } else if(qual = "&w=800&l=9") {
+          quality("&w=900");
+          return "Normale";
+        } else if(qual = "&w=600&l=9") {
+          quality("&w=700&q=30");
+          return "Buona";
         } else {
-          return "Massima";
+          return "Massina";
         }
-      } else {
-        return "Massina";
       }
     }
     </script>
