@@ -100,15 +100,19 @@
     function qualityName() {
       if(getCookie("quality")) {
         qual = getCookie("quality");
-        if(qual == "&w=800&output=jpg") {
+        if(qual == "&w=900&output=jpg") {
           return "Normale";
-        } else if(qual == "&w=800&output=jpg&q=30") {
+        } else if(qual == "&w=900&output=jpg&q=30") {
           return "Buona";
         } else if(qual == "") {
           return "Massima";
+        } else {
+          return "Normale";
+          quality("&w=800&output=jpg");
         }
       } else {
-        return "Massima";
+        quality("&w=800&output=jpg");
+        return "Normale";
       }
     }
     </script>
@@ -137,7 +141,7 @@
               <div class="text">Qualità ({{qualityName()}})</div>
               <div class="menu">
                 <div class="item" onclick='quality("")'>Massima</div>
-                <div class="item" onclick='quality("&w=800&output=jpg")'>Normale</div>
+                <div class="item" onclick='quality("&w=900&output=jpg")'>Normale</div>
                 <div class="item" onclick='quality("&w=800&output=jpg&q=30")'>Buona</div>
               </div>
             </div>
