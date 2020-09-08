@@ -111,7 +111,7 @@
 
             <div style="display: none;" v-if="ready" class="ui card mload">
               <div class="image">
-                <img v-bind:src="'https://images.weserv.nl/?we&w=300&url=https://mangadex.org'+info.manga.cover_url">
+                <img v-bind:src="info.manga.cover_url">
               </div>
               <div class="content">
                 <a class="header">{{ info.manga.title }}</a>
