@@ -31,7 +31,7 @@
             }
           })
 
-          $.getJSON('https://api.minettyx.com/ccm/mangas', function(dataa) {
+          $.getJSON('https://ccm-api.vercel.app/mangas', function(dataa) {
             app.mangas = dataa;
             app.ready = true;
           });

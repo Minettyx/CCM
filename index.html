@@ -33,7 +33,7 @@
             }
           })
 
-          $.getJSON('https://api.minettyx.com/ccm/latestChapters', function(dataa) {
+          $.getJSON('https://ccm-api.vercel.app/latests', function(dataa) {
             app.latest = dataa;
             app.ready = true;
           });
