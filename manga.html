@@ -46,7 +46,7 @@
             }
           });
 
-          $.getJSON('https://ccm-api.vercel.app/manga/'+mangaId, function(dataa) {
+          $.getJSON('https://ccm-api.minettyx.com/manga/'+mangaId, function(dataa) {
             if(!dataa.ok) {
               window.location.href = "/404";
             }
@@ -80,7 +80,7 @@
     }
 
     function downlo(id, btn) {
-      $.getJSON('https://ccm-api.vercel.app/chapter/'+id, function(dataaa) {
+      $.getJSON('https://ccm-api.minettyx.com/chapter/'+id, function(dataaa) {
         var name = app.info.manga.title+" "+(dataaa.volume ? "Vol. "+dataaa.volume+" " : "")+"Ch. "+dataaa.chapter+(dataaa.title ? " - "+dataaa.title : "");
         $('#prgrs').progress({ percent: 0});
         $("#prgrs").show();

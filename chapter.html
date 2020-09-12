@@ -51,14 +51,14 @@
          }
 
 
-         $.getJSON('https://ccm-api.vercel.app/chapter/'+chapterId, function(dataa) {
+         $.getJSON('https://ccm-api.minettyx.com/chapter/'+chapterId, function(dataa) {
            if(!dataa.ok) {
              window.location.href = "/404";
            }
            app.info = dataa;
            $.fn.imageOrder(".mangapage");
 
-           $.getJSON('https://ccm-api.vercel.app/manga/'+dataa.manga_id, function(dataaa) {
+           $.getJSON('https://ccm-api.minettyx.com/manga/'+dataa.manga_id, function(dataaa) {
              app.manga = dataaa;
              app.ready = true;
 
