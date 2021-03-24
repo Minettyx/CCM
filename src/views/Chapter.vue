@@ -3,10 +3,10 @@
 
   <div class="container" v-if="!loadingmanga">
     <div class="row">
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <h3 @click="this.$router.push('/manga/'+this.$route.params.manga)" style="text-align: left; cursor: pointer;">{{manga.title}}</h3>
       </div>
-      <div class="col-3">
+      <div class="col-12 col-lg-3">
         <select class="form-select" @change="this.$router.push('/chapter/'+this.$route.params.manga+'/'+$event.target.value)">
           <option :value='ch.chapter' :selected="ch.chapter == this.$route.params.id" v-for="ch in manga.chapters" :key="ch">{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}{{ ch.title ? ' - '+ch.title : '' }}</option>
         </select>
