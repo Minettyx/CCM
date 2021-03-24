@@ -11,7 +11,7 @@
       </ul>
 
       <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-        <input v-model="search" type="search" class="form-control" placeholder="Search...">
+        <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
       </form>
 
     </div>
