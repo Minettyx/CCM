@@ -11,7 +11,7 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-5" v-if="!loading">
+      <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" v-if="!loading">
         <div class="col" v-for="o in data" :key="o">
           <div class="card shadow-sm" style='cursor: pointer;' @click="this.$router.push('/manga/'+o.id)">
             <img class="bd-placeholder-img card-img-top" style="object-fit: cover; aspect-ratio: 2/3" :src="'https://cdn.ccmscans.in/mangas/'+o.id+'/cover.jpg'" role="img">
