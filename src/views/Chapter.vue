@@ -80,16 +80,6 @@ export default {
         this.data = response.data;
         this.pagesloading.push(response.data.images[0])
         this.loading = false;
-      }).catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, nuovo tentativo tra 5 secondi...",
-        {
-          position:"bottom-right",
-          duration: 5000
-        })
-        setTimeout(function () {
-          this.getdata()
-        }.bind(this), 5000)
       })
     },
     async getMangadata() {
@@ -99,16 +89,6 @@ export default {
       .then(response => {
         this.manga = response.data;
         this.loadingmanga = false;
-      }).catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, nuovo tentativo tra 5 secondi...",
-        {
-          position:"bottom-right",
-          duration: 5000
-        })
-        setTimeout(function () {
-          this.getdata()
-        }.bind(this), 5000)
       })
     },
     loadNextImage() {

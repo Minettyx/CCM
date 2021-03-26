@@ -69,16 +69,6 @@ export default {
       .then(response => {
         this.data = response.data;
         this.loading = false;
-      }).catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, nuovo tentativo tra 5 secondi...",
-        {
-          position:"bottom-right",
-          duration: 5000
-        })
-        setTimeout(function () {
-          this.getdata()
-        }.bind(this), 5000)
       })
     },
     parseStatus(val) {
