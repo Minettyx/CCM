@@ -22,11 +22,19 @@
     </div>
     <div class="container" v-if="!loading">
 
-      <div v-for="page in data.images" :key="page" class="imgbox">
-        <img :src="page" class="img-fluid center-fit" style="cursor: pointer;" v-if="Math.abs(data.images.indexOf(page)-readingpage)<=loadlimit" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="loadlimit++">
+      <div v-if="!data.webtoon">
+        <div v-for="page in data.images" :key="page" class="imgbox">
+          <img :src="page" class="img-fluid center-fit" style="cursor: pointer;" v-if="Math.abs(data.images.indexOf(page)-readingpage)<=loadlimit" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="loadlimit++">
+        </div>
       </div>
+      <div v-if="data.webtoon">
+        <div v-for="page in data.images" :key="page" >
+         <img :src="page" class="img-fluid" style="width: 100%" v-if="data.images.indexOf(page)<=loadlimit" @load="loadlimit++">
+        </div>
+      </div>
+
       <br>
-      <input type="range" class="form-range" min="0" :max="data.images.length-1" step="0" v-model="readingpage">
+      <input type="range" class="form-range" min="0" :max="data.images.length-1" step="0" v-model="readingpage" v-if="!data.webtoon">
       <br>
       <br>
       <nav aria-label="..." class="d-flex justify-content-center" v-if="!loadingmanga">
