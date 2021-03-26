@@ -22,7 +22,11 @@
     </div>
     <div class="container" v-if="!loading">
 
-      <img :src="page" class="img-fluid" style="width: 100%" v-for="page in pagesloading" :key="page" @load="loadNextImage()">
+      <div v-for="page in data.images" :key="page" class="imgbox">
+        <img :src="page" class="img-fluid center-fit" style="cursor: pointer;" v-if="Math.abs(data.images.indexOf(page)-readingpage)<=loadlimit" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="loadlimit++">
+      </div>
+      <br>
+      <input type="range" class="form-range" min="0" :max="data.images.length-1" step="0" v-model="readingpage">
       <br>
       <br>
       <nav aria-label="..." class="d-flex justify-content-center" v-if="!loadingmanga">
@@ -53,8 +57,8 @@ export default {
       manga: {},
       loading: true,
       loadingmanga: true,
-      loaded: 0,
-      pagesloading: []
+      readingpage: 0,
+      loadlimit: 0
     }
   },
   mounted() {
@@ -70,30 +74,25 @@ export default {
     }
   },
   methods: {
-    async getdata() {
+    getdata() {
+      this.readingpage = 0
+      this.loadlimit = 0
       this.loading = true;
-      this.loaded = 0;
-      this.pagesloading = [];
-      await this.axios
+      this.axios
       .get('https://api.ccmscans.in/chapter/'+this.$route.params.manga+'/'+this.$route.params.id)
       .then(response => {
         this.data = response.data;
-        this.pagesloading.push(response.data.images[0])
         this.loading = false;
       })
     },
-    async getMangadata() {
+    getMangadata() {
       this.loadingmanga = true;
-      await this.axios
+      this.axios
       .get('https://api.ccmscans.in/manga/'+this.$route.params.manga)
       .then(response => {
         this.manga = response.data;
         this.loadingmanga = false;
       })
-    },
-    loadNextImage() {
-      this.loaded++;
-      this.pagesloading.push(this.data.images[this.loaded])
     },
     getChapter(val) {
       var i = 0;
@@ -105,7 +104,26 @@ export default {
         i++;
       });
       return res
+    },
+    readnext() {
+      if(this.readingpage != this.data.images.length-1) {
+        this.readingpage++
+      } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
+        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
+      }
     }
   }
 }
 </script>
+
+<style>
+.imgbox {
+  display: grid;
+  height: 100%;
+}
+.center-fit {
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
+}
+</style>
