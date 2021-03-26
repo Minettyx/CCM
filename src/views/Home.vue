@@ -17,11 +17,11 @@
                   <img :src="manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 2/3'>
                 </div>
                 <div class="card-body col-7">
-                  <h4 class="card-title" style="font-weight: bold; cursor: pointer;"  @click="this.$router.push('/manga/'+manga.id)" >{{manga.title}}</h4>
+                  <h4 class="card-title" style="font-weight: bold; cursor: pointer; margin-right: 15px"  @click="this.$router.push('/manga/'+manga.id)" >{{manga.title}}</h4>
                   <table class='table table-borderless'>
                     <tbody>
                       <tr v-for="ch in manga.chapters" :key='ch'>
-                        <th style="text-align: left;"><a @click="this.$router.push('/chapter/'+manga.id+'/'+ch.chapter)" class="link" style='cursor: pointer;'>{{(ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title ? ' - '+ch.title : ''}}</a></th>
+                        <th style="text-align: left;"><a @click="this.$router.push('/chapter/'+manga.id+'/'+ch.chapter)" class="link" style='cursor: pointer;'>{{(ch.volume&&viewport>0 ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title&&viewport>3 ? ' - '+ch.title : ''}}</a></th>
                         <td style="text-align: right"><span class="text-muted" >{{timeSince(ch.time)}} fa</span></td>
                         <td></td>
                       </tr>
@@ -43,11 +43,16 @@ export default {
   data() {
     return {
       data: [],
-      loading: true
+      loading: true,
+      viewport: ''
     }
   },
   mounted() {
     this.getdata();
+    this.updateViewport();
+    window.addEventListener('resize', () => {
+      this.updateViewport();
+    });
   },
   methods: {
     async getdata() {
@@ -109,6 +114,17 @@ export default {
       } else {
         return Math.floor(interval) + " secondi";
       }
+    },
+    updateViewport() {
+      const width = Math.max(
+        document.documentElement.clientWidth,
+        window.innerWidth || 0
+      )
+      if (width <= 576) { this.viewport = 0 }
+      else if (width <= 768) { this.viewport =1 }
+      else if (width <= 992) { this.viewport = 2 }
+      else if (width <= 1200) { this.viewport = 3 }
+      else { this.viewport = 4 }
     }
   }
 }
