@@ -92,6 +92,15 @@ export default {
         this.data = response.data;
         this.loading = false;
       })
+      .catch(() => {
+        this.$toast.error(
+        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
+        {
+          position:"bottom-right",
+          duration: 5000,
+          maxToasts: 1
+        })
+      })
     },
     getMangadata() {
       this.loadingmanga = true;
@@ -100,6 +109,15 @@ export default {
       .then(response => {
         this.manga = response.data;
         this.loadingmanga = false;
+      })
+      .catch(() => {
+        this.$toast.error(
+        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
+        {
+          position:"bottom-right",
+          duration: 5000,
+          maxToasts: 1
+        })
       })
     },
     getChapter(val) {

@@ -62,13 +62,22 @@ export default {
     this.getdata();
   },
   methods: {
-    async getdata() {
+    getdata() {
       this.loading = true;
-      await this.axios
+      this.axios
       .get('https://api.ccmscans.in/manga/'+this.$route.params.id)
       .then(response => {
         this.data = response.data;
         this.loading = false;
+      })
+      .catch(() => {
+        this.$toast.error(
+        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
+        {
+          position:"bottom-right",
+          duration: 5000,
+          maxToasts: 1
+        })
       })
     },
     parseStatus(val) {

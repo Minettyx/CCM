@@ -55,13 +55,22 @@ export default {
     });
   },
   methods: {
-    async getdata() {
+    getdata() {
       this.loading = true;
-      await this.axios
+      this.axios
       .get('https://api.ccmscans.in/chapters?sort=time&limit=20&grouped=1')
       .then(response => {
         this.data = response.data;
         this.loading = false;
+      })
+      .catch(() => {
+        this.$toast.error(
+        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
+        {
+          position:"bottom-right",
+          duration: 5000,
+          maxToasts: 1
+        })
       })
     },
     timeSince(date) {
