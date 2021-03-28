@@ -4,8 +4,8 @@
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a @click="this.$router.push('/')" class="nav-link px-2 link-secondary" style='cursor: pointer;'>Home</a></li>
-        <li><a @click="this.$router.push('/archive')" class="nav-link px-2 link-dark" style='cursor: pointer;'>Archivio</a></li>
+        <li><router-link to="/" class="nav-link px-2 link-secondary" style='cursor: pointer;'>Home</router-link></li>
+        <li><router-link to="/archive" class="nav-link px-2 link-dark" style='cursor: pointer;'>Archivio</router-link></li>
         <li><a href='https://github.com/Minettyx/CCM' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">GitHub</a></li>
         <li><a href='https://paypal.me/pools/c/8ru3kh05Tu' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">Donazioni</a></li>
       </ul>

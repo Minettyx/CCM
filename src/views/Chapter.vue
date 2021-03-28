@@ -24,7 +24,7 @@
 
       <div v-if="!data.webtoon">
         <div v-for="page in data.images" :key="page" class="imgbox">
-          <img :src="page" class="img-fluid center-fit" style="cursor: pointer;" v-if="Math.abs(data.images.indexOf(page)-readingpage)<=loadlimit" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="loadlimit++">
+          <img :src="data.images.indexOf(page)==readingpage||data.images.indexOf(page)==firsttoload||this.loadedimages[this.data.images.indexOf(page)]==1 ? page : ''" class="img-fluid center-fit" style="cursor: pointer;" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="afterimageload(page)">
         </div>
       </div>
       <div v-if="data.webtoon">
@@ -66,7 +66,9 @@ export default {
       loading: true,
       loadingmanga: true,
       readingpage: 0,
-      loadlimit: 0
+      loadlimit: 0,
+      loadedimages: [],
+      firsttoload: 0
     }
   },
   mounted() {
@@ -76,7 +78,9 @@ export default {
   watch: {
     '$route.params.id': {
       handler() {
-        this.getdata()
+        if(this.$route.path.includes('/chapter')) {
+          this.getdata()
+        }
       },
       deep: true
     }
@@ -90,6 +94,9 @@ export default {
       .get('https://api.ccmscans.in/chapter/'+this.$route.params.manga+'/'+this.$route.params.id)
       .then(response => {
         this.data = response.data;
+        for (let i = 0; i < response.data.images.length; i++) {
+          this.loadedimages[i] = 0;
+        }
         this.loading = false;
       })
       .catch(() => {
@@ -137,6 +144,18 @@ export default {
       } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
       }
+    },
+    updatefirsttoload() {
+      for(let i = this.readingpage; i < this.loadedimages.length; i++) {
+        if(this.loadedimages[i] == 0) {
+          this.firsttoload = i;
+          return
+        }
+      }
+    },
+    afterimageload(page) {
+      this.loadedimages[this.data.images.indexOf(page)] = 1;
+      this.updatefirsttoload();
     }
   }
 }
