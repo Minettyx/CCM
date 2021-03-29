@@ -1,7 +1,7 @@
 <template>
 <div>
 
-  <div class="container" v-if="!loadingmanga">
+  <div class="container" v-if="!loading">
     <div class="row">
       <div class="col-12 col-lg-9">
         <h3 @click="this.$router.push('/manga/'+this.$route.params.manga)" style="text-align: left; cursor: pointer;">{{manga.title}}</h3>
@@ -37,7 +37,7 @@
       <input type="range" class="form-range" min="0" :max="data.images.length-1" step="0" v-model="readingpage" v-if="!data.webtoon">
       <br>
       <br>
-      <nav aria-label="..." class="d-flex justify-content-center" v-if="!loadingmanga">
+      <nav aria-label="..." class="d-flex justify-content-center" v-if="!loading">
         <ul class="pagination">
           <li class="page-item" :class="{disabled: this.$route.params.id==manga.chapters[0].chapter}">
             <a style='cursor: pointer;' class="page-link" tabindex="-1" aria-disabled="true" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(-1))" ><span aria-hidden="true">&laquo;</span></a>
@@ -64,7 +64,6 @@ export default {
       data: {},
       manga: {},
       loading: true,
-      loadingmanga: true,
       readingpage: 0,
       loadlimit: 0,
       loadedimages: [],
@@ -72,7 +71,6 @@ export default {
     }
   },
   mounted() {
-    this.getMangadata();
     this.getdata();
   },
   watch: {
@@ -91,31 +89,14 @@ export default {
       this.loadlimit = 0
       this.loading = true;
       this.axios
-      .get('https://api.ccmscans.in/chapter/'+this.$route.params.manga+'/'+this.$route.params.id)
+      .get('https://api.ccmscans.in/chapter/'+this.$route.params.manga+'/'+this.$route.params.id+'?mangainfo=1')
       .then(response => {
         this.data = response.data;
         for (let i = 0; i < response.data.images.length; i++) {
           this.loadedimages[i] = 0;
         }
+        this.manga = response.data.manga
         this.loading = false;
-      })
-      .catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
-        {
-          position:"bottom-right",
-          duration: 5000,
-          maxToasts: 1
-        })
-      })
-    },
-    getMangadata() {
-      this.loadingmanga = true;
-      this.axios
-      .get('https://api.ccmscans.in/manga/'+this.$route.params.manga)
-      .then(response => {
-        this.manga = response.data;
-        this.loadingmanga = false;
       })
       .catch(() => {
         this.$toast.error(
