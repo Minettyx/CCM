@@ -14,7 +14,7 @@
             <div class="card">
               <div class="row justify-content-md-center g-5">
                 <div class="col-5">
-                  <img :src="manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 2/3'>
+                  <img :src="manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 12/17'>
                 </div>
                 <div class="card-body col-7">
                   <h4 class="card-title" style="font-weight: bold; cursor: pointer; margin-right: 15px"  @click="this.$router.push('/manga/'+manga.id)" >{{manga.title}}</h4>
