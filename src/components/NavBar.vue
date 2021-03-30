@@ -8,6 +8,7 @@
         <li><router-link to="/archive" class="nav-link px-2 link-dark" style='cursor: pointer;'>Archivio</router-link></li>
         <li><a href='https://github.com/Minettyx/CCM' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">GitHub</a></li>
         <li><a href='https://paypal.me/pools/c/8ru3kh05Tu' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">Donazioni</a></li>
+        <li><a href='https://t.me/ccmtranslations' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">Telegram</a></li>
       </ul>
 
       <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
