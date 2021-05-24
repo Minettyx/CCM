@@ -40,13 +40,13 @@
       <nav aria-label="..." class="d-flex justify-content-center" v-if="!loading">
         <ul class="pagination">
           <li class="page-item" :class="{disabled: this.$route.params.id==manga.chapters[0].chapter}">
-            <a style='cursor: pointer;' class="page-link" tabindex="-1" aria-disabled="true" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(-1))" ><span aria-hidden="true">&laquo;</span></a>
+            <a style='cursor: pointer;' class="page-link" tabindex="-1" aria-disabled="true" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(-1))" ><span aria-hidden="true"><fai icon='chevron-left'/></span></a>
           </li>
           <select class="form-select" @change="this.$router.push('/chapter/'+this.$route.params.manga+'/'+$event.target.value)">
             <option :value='ch.chapter' :selected="ch.chapter == this.$route.params.id" v-for="ch in manga.chapters" :key="ch">{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}{{ ch.title ? ' - '+ch.title : '' }}</option>
           </select>
           <li class="page-item" :class="{disabled: this.$route.params.id==manga.chapters.slice().pop().chapter}">
-            <a style='cursor: pointer;' class="page-link" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(1))"><span aria-hidden="true">&raquo;</span></a>
+            <a style='cursor: pointer;' class="page-link" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(1))"><span aria-hidden="true"><fai icon='chevron-right'/></span></a>
           </li>
         </ul>
       </nav>
@@ -69,11 +69,25 @@ export default defineComponent({
       readingpage: 0,
       loadlimit: 0,
       loadedimages: [],
-      firsttoload: 0
+      firsttoload: 0,
+      keylistener: null
     }
   },
   mounted() {
-    this.getdata();
+    this.getdata()
+    this.keylistener = (e) => {
+      if(!this.loading) {
+        if (e.key == 'ArrowLeft') {
+          this.readprevious()
+        } else if(e.key == 'ArrowRight') {
+          this.readnext()
+        }
+      }
+    }
+    window.addEventListener('keydown', this.keylistener)
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.keylistener)
   },
   watch: {
     '$route.params.id': {
@@ -126,6 +140,13 @@ export default defineComponent({
         this.readingpage++
       } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
+      }
+    },
+    readprevious() {
+      if(this.readingpage != 0) {
+        this.readingpage--
+      } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
+        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1))
       }
     },
     updatefirsttoload() {

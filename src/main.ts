@@ -9,10 +9,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faSun, faMoon, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faSun, faMoon)
+library.add(faSun, faMoon, faChevronRight, faChevronLeft)
 
 const app = createApp(App)
 
