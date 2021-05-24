@@ -1,0 +1,25 @@
+name: deploy to vercel
+
+on:
+  push:
+    branches: [ master ]
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Build Site
+        uses: actions/setup-node@master
+        run: npm ci
+        run: npm run build
+
+      - name: Deploy
+        uses: nwtgck/actions-netlify@v1.2.2 
+        with:
+          publish-dir: './dist'
+          production-branch: master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
