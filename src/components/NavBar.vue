@@ -11,10 +11,14 @@
         <li><a href='https://t.me/ccmtranslations' class="nav-link px-2 link-dark" style='cursor: pointer;' target="_blank" rel="noreferrer">Telegram</a></li>
       </ul>
 
-      <a href="" class="nav-link px-2 link-dark" style='cursor: pointer;' @click="switchmode()"><fai :icon="getCookie('darkmode') == 'true' ? 'sun' : 'moon'"/></a>
-      <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-        <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
-      </form>
+      <ul class="nav col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 justify-content-center">
+        <li><a href="" class="nav-link px-2 link-dark" style='cursor: pointer;' @click="switchmode()"><fai :icon="getCookie('darkmode') == 'true' ? 'sun' : 'moon'"/></a></li>
+        <li>
+          <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))">
+            <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
+          </form>
+        </li>
+      </ul>
 
     </div>
   </div>
