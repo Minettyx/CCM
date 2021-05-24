@@ -24,7 +24,7 @@
 
       <div v-if="!data.webtoon">
         <div v-for="page in data.images" :key="page" class="imgbox">
-          <img :src="data.images.indexOf(page)==readingpage||data.images.indexOf(page)==firsttoload||this.loadedimages[this.data.images.indexOf(page)]==1 ? page : ''" class="img-fluid center-fit" style="cursor: pointer;" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='readnext()' @load="afterimageload(page)">
+          <img :src="data.images.indexOf(page)==readingpage||data.images.indexOf(page)==firsttoload||this.loadedimages[this.data.images.indexOf(page)]==1 ? page : ''" class="img-fluid center-fit" style="cursor: pointer;" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='imageclick($event)' @load="afterimageload(page)">
         </div>
       </div>
       <div v-if="data.webtoon">
@@ -160,6 +160,13 @@ export default defineComponent({
     afterimageload(page) {
       this.loadedimages[this.data.images.indexOf(page)] = 1;
       this.updatefirsttoload();
+    },
+    imageclick(e) {
+      if(e.pageX > screen.width/2) {
+        this.readnext()
+      } else {
+        this.readprevious()
+      }
     }
   }
 })
