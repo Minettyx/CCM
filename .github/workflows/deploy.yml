@@ -12,8 +12,9 @@ jobs:
       - uses: actions/setup-node@master
 
       - name: Build Site
-        run: npm ci
-        run: npm run build
+        run: |
+          npm ci
+          npm run build
 
       - name: Deploy
         uses: nwtgck/actions-netlify@v1.2.2 
