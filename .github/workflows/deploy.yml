@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-node@master
 
       - name: Build Site
-        uses: actions/setup-node@master
         run: npm ci
         run: npm run build
 
