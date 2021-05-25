@@ -16,15 +16,6 @@ jobs:
           npm ci
           npm run build
 
-      - name: Deploy to netlify
-        uses: nwtgck/actions-netlify@v1.2.2 
-        with:
-          publish-dir: './dist'
-          production-branch: master
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
       - name: Push to build branch
         uses: s0/git-publish-subdir-action@develop
         env:
