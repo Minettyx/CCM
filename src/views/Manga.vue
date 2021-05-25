@@ -10,7 +10,7 @@
     <div class="container" v-if="!loading">
       <div class="row justify-content-md-center">
         <div class="col-lg-3">
-          <div class="card">
+          <div class="card" data-affix='100'>
             <div class="row justify-content-md-center">
               <div class="col-6 col-lg-12">
                 <img :src="data.cover" class="card-img-top" alt="...">
@@ -51,6 +51,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import affix from '../components/affix'
 
 export default defineComponent({
   name: 'Archive',
@@ -62,6 +63,10 @@ export default defineComponent({
   },
   mounted() {
     this.getdata();
+    affix.init()
+  },
+  beforeUnmount() {
+    affix.unmount()
   },
   methods: {
     getdata() {

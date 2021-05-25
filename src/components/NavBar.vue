@@ -1,5 +1,5 @@
 <template>
-<header class="p-3 mb-3 border-bottom bg-white">
+<header class="p-3 mb-3 border-bottom bg-white" :class="{'sticky-top': width>=992}">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
@@ -36,11 +36,18 @@ export default defineComponent({
   name: 'NavBar',
   data() {
     return {
-      search: ''
+      search: '',
+      width: window.innerWidth
     }
   },
   mounted() {
     this.updatemode()
+    window.onresize = () => {
+      this.width = window.innerWidth
+    }
+  },
+  beforeUnmount() {
+    window.onresize = () => {return}
   },
   methods: {
     switchmode() {
