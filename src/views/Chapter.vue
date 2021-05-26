@@ -179,7 +179,7 @@ export default defineComponent({
 }
 .center-fit {
   max-width: 100%;
-  max-height: 100vh;
+  max-height: calc(100vh - 50px);
   margin: auto;
 }
 </style>

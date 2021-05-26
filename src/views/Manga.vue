@@ -10,7 +10,7 @@
     <div class="container" v-if="!loading">
       <div class="row justify-content-md-center">
         <div class="col-lg-3">
-          <div class="card sticky-top" style="top: 100px; z-index: 0">
+          <div class="card sticky-top" style="top: 70px; z-index: 0">
             <div class="row justify-content-md-center">
               <div class="col-6 col-lg-12">
                 <img :src="data.cover" class="card-img-top" alt="...">
