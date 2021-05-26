@@ -112,7 +112,9 @@ export default defineComponent({
           this.loadedimages[i] = 0;
         }
         this.manga = response.data.manga
-        this.loading = false;
+        this.loading = false
+        const hashpage = parseInt(location.hash.substring(1))
+        this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
       })
       .catch(() => {
         this.$toast.error(
@@ -141,6 +143,7 @@ export default defineComponent({
       } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
       }
+      history.pushState(null, null, '#'+(this.readingpage+1))
     },
     readprevious() {
       if(this.readingpage != 0) {
@@ -148,6 +151,7 @@ export default defineComponent({
       } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1))
       }
+      history.pushState(null, null, '#'+(this.readingpage+1))
     },
     updatefirsttoload() {
       for(let i = this.readingpage; i < this.loadedimages.length; i++) {
