@@ -97,6 +97,11 @@ export default defineComponent({
         }
       },
       deep: true
+    },
+    'readingpage': {
+      handler() {
+        history.pushState(null, null, '#'+(parseInt(this.readingpage)+1))
+      }
     }
   },
   methods: {
@@ -143,7 +148,6 @@ export default defineComponent({
       } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
       }
-      history.pushState(null, null, '#'+(this.readingpage+1))
     },
     readprevious() {
       if(this.readingpage != 0) {
@@ -151,7 +155,6 @@ export default defineComponent({
       } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1))
       }
-      history.pushState(null, null, '#'+(this.readingpage+1))
     },
     updatefirsttoload() {
       for(let i = this.readingpage; i < this.loadedimages.length; i++) {
