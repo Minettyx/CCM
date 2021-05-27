@@ -119,7 +119,12 @@ export default defineComponent({
         this.manga = response.data.manga
         this.loading = false
         const hashpage = parseInt(location.hash.substring(1))
-        this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
+        if(hashpage) {
+          this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
+        } else if(location.hash.substring(1) == 'last') {
+          this.readingpage = this.data.images.length-1
+        }
+        
       })
       .catch(() => {
         this.$toast.error(
@@ -153,7 +158,7 @@ export default defineComponent({
       if(this.readingpage != 0) {
         this.readingpage--
       } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
-        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1))
+        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1)+'#last')
       }
     },
     updatefirsttoload() {
