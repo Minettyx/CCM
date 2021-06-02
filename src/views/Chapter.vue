@@ -1,58 +1,56 @@
 <template>
-<div>
+<div class="container-fluid">
 
-  <div class="container" v-if="!loading">
-    <div class="row">
-      <div class="col-12 col-lg-9">
-        <h3 @click="this.$router.push('/manga/'+this.$route.params.manga)" style="text-align: left; cursor: pointer;">{{manga.title}}</h3>
-      </div>
-      <div class="col-12 col-lg-3">
-        <select class="form-select" @change="this.$router.push('/chapter/'+this.$route.params.manga+'/'+$event.target.value)">
-          <option :value='ch.chapter' :selected="ch.chapter == this.$route.params.id" v-for="ch in manga.chapters.slice().reverse()" :key="ch">{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}{{ ch.title ? ' - '+ch.title : '' }}</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="album py-5 bg-light">
-    <div class="d-flex justify-content-center" v-if="loading">
+  <div class="album py-5 bg-light" v-if="loading">
+    <div class="d-flex justify-content-center">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="container" v-if="!loading">
+  </div>
 
-      <div v-if="!data.webtoon">
-        <div v-for="page in data.images" :key="page" class="imgbox">
-          <img :src="data.images.indexOf(page)==readingpage||data.images.indexOf(page)==firsttoload||this.loadedimages[this.data.images.indexOf(page)]==1 ? page : ''" class="img-fluid center-fit" style="cursor: pointer;" v-show="Math.abs(data.images.indexOf(page)-readingpage)==0" @click='imageclick($event)' @load="afterimageload(page)">
-        </div>
-      </div>
-      <div v-if="data.webtoon">
-        <div v-for="page in data.images" :key="page" >
-         <img :src="page" class="img-fluid" style="width: 100%" v-if="data.images.indexOf(page)<=loadlimit" @load="loadlimit++">
-        </div>
-      </div>
-
-      <br>
-      <input type="range" class="form-range" min="0" :max="data.images.length-1" step="0" v-model="readingpage" v-if="!data.webtoon">
-      <br>
-      <br>
-      <nav aria-label="..." class="d-flex justify-content-center" v-if="!loading">
-        <ul class="pagination">
-          <li class="page-item" :class="{disabled: this.$route.params.id==manga.chapters[0].chapter}">
-            <a style='cursor: pointer;' class="page-link" tabindex="-1" aria-disabled="true" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(-1))" ><span aria-hidden="true"><fai icon='chevron-left'/></span></a>
-          </li>
-          <select class="form-select" @change="this.$router.push('/chapter/'+this.$route.params.manga+'/'+$event.target.value)">
-            <option :value='ch.chapter' :selected="ch.chapter == this.$route.params.id" v-for="ch in manga.chapters.slice().reverse()" :key="ch">{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}{{ ch.title ? ' - '+ch.title : '' }}</option>
-          </select>
-          <li class="page-item" :class="{disabled: this.$route.params.id==manga.chapters.slice().pop().chapter}">
-            <a style='cursor: pointer;' class="page-link" @click="this.$router.push('/chapter/'+this.$route.params.manga+'/'+getChapter(1))"><span aria-hidden="true"><fai icon='chevron-right'/></span></a>
-          </li>
-        </ul>
-      </nav>
-
+  <div style="position: fixed; width: 100%; left: 0; right: 0; top: 10px;">
+    <div v-if="!loading" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; text-align: left; transition: visibility 0.25s, opacity 0.25s linear;">
+      <div style="padding: 6px 10px; border-radius: 100px;" class="cborder"><router-link :to="'/manga/'+this.$route.params.manga"><fai icon='arrow-left' class="fa-lg"/></router-link></div>
+      <div style="padding: 7px 7px 2px 7px;" class="cborder"><h6>{{ manga.title }}</h6><small>{{ (data.volume ? 'Vol.'+data.volume+' ' : '') + 'Ch.'+data.chapter }}{{ data.title ? ' - '+data.title : '' }}</small></div>
+      <!-- <div style="padding: 6px 10px; border-radius: 100px; margin-left: auto;" class="cborder"><a type="button"><fai icon='cog' class="fa-lg"/></a></div> -->
     </div>
   </div>
+
+  <div style="position: fixed; width: 100%; left: 0; right: 0; bottom: 10px;">
+    <div v-if="!loading" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; transition: visibility 0.25s, opacity 0.25s linear;">
+      <router-link v-if="this.$route.params.id!=manga.chapters[0].chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(-1)" class="cborder" style="padding: 1px 8px; margin-left: auto;"><fai icon='chevron-left' class="fa-lg"/></router-link>
+      <input v-if="!data.webtoon" type="range" class="form-range cborder" min="0" :max="data.images.length-1" step="0" v-model="readingpage" style="padding: 10px;">
+      <router-link v-if="this.$route.params.id!=manga.chapters.slice().pop().chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(1)" class="cborder" style="padding: 1px 8px; margin-right: auto;"><fai icon='chevron-right' class="fa-lg"/></router-link>
+    </div>
+  </div>
+
+  <div class="row" v-if="!loading">
+    <div class="col-0 col-lg-1 col-xl-2"></div>
+    <div class="col-12 col-lg-10 col-xl-8" style="padding: 0px">
+      <div>
+        <div v-if="!data.webtoon">
+          <div v-for="page in data.images" :key="page" class="imgbox" :style="{ 'height': Math.abs(data.images.indexOf(page)-readingpage)==0 ? '100vh' : '0px' }">
+            <img
+              :src="data.images.indexOf(page)==readingpage||data.images.indexOf(page)==firsttoload||this.loadedimages[this.data.images.indexOf(page)]==1 ? page : ''"
+              class="img-fluid cimage"
+              style="cursor: pointer;"
+              v-show="Math.abs(data.images.indexOf(page)-readingpage)==0"
+              @click='imageclick($event)'
+              @load="afterimageload(page)"
+            >
+          </div>
+        </div>
+        <div v-if="data.webtoon">
+          <div v-for="page in data.images" :key="page" >
+          <img :src="page" class="img-fluid" style="width: 100%" v-if="data.images.indexOf(page)<=loadlimit" @load="loadlimit++" @click="gui = !gui">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-0 col-lg-1 col-xl-2"></div>
+  </div>
+
 </div>
 </template>
 
@@ -70,12 +68,12 @@ export default defineComponent({
       loadlimit: 0,
       loadedimages: [],
       firsttoload: 0,
-      keylistener: null
+      gui: true
     }
   },
   mounted() {
     this.getdata()
-    this.keylistener = (e) => {
+    window.onkeydown = (e) => {
       if(!this.loading) {
         if (e.key == 'ArrowLeft') {
           this.readprevious()
@@ -84,10 +82,9 @@ export default defineComponent({
         }
       }
     }
-    window.addEventListener('keydown', this.keylistener)
   },
   beforeUnmount() {
-    window.removeEventListener('keydown', this.keylistener)
+    window.onkeydown = () => {return}
   },
   watch: {
     '$route.params.id': {
@@ -100,7 +97,7 @@ export default defineComponent({
     },
     'readingpage': {
       handler() {
-        history.pushState(null, null, '#'+(parseInt(this.readingpage)+1))
+        history.pushState(history.state, '', '#'+(parseInt(this.readingpage)+1))
       }
     }
   },
@@ -143,8 +140,8 @@ export default defineComponent({
         if(el.chapter == this.$route.params.id) {
           res = this.manga.chapters[i+val].chapter
         }
-        i++;
-      });
+        i++
+      })
       return res
     },
     readnext() {
@@ -174,10 +171,13 @@ export default defineComponent({
       this.updatefirsttoload();
     },
     imageclick(e) {
-      if(e.pageX > screen.width/2) {
+      const width = e.target.getBoundingClientRect().width
+      if(e.pageX-(screen.width-width)/2 > width/3*2) {
         this.readnext()
-      } else {
+      } else if(e.pageX-(screen.width-width)/2 < width/3) {
         this.readprevious()
+      } else {
+        this.gui = !this.gui
       }
     }
   }
@@ -187,11 +187,19 @@ export default defineComponent({
 <style>
 .imgbox {
   display: grid;
-  height: 100%;
+  width:100%;
+  vertical-align:top;
+  text-align:center;
+  overflow-x:hidden;
 }
-.center-fit {
+.cimage {
   max-width: 100%;
-  max-height: calc(100vh - 50px);
+  max-height: 100vh;
+  display: block;
   margin: auto;
+}
+.cborder {
+  background: #ebebeb;
+  border-radius: 15px;
 }
 </style>

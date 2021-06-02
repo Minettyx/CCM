@@ -1,5 +1,6 @@
 <template>
 <div>
+  <NavBar></NavBar>
   <h1 v-if="!loading">{{ data.title }}</h1>
   <div class="album py-5 bg-light">
     <div class="d-flex justify-content-center" v-if="loading">
@@ -51,9 +52,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import NavBar from '../components/NavBar.vue'
 
 export default defineComponent({
   name: 'Archive',
+  components: {
+    NavBar
+  },
   data() {
     return {
       data: {chapters: []},

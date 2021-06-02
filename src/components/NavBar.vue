@@ -27,10 +27,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import {
-    enable as enableDarkMode,
-    disable as disableDarkMode
-} from 'darkreader'
 
 export default defineComponent({
   name: 'NavBar',
@@ -41,7 +37,6 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.updatemode()
     window.onresize = () => {
       this.width = window.innerWidth
     }
@@ -57,17 +52,6 @@ export default defineComponent({
         this.setCookie('darkmode', 'true', 36500)
       }
       this.$router.push('')
-    },
-    updatemode() {
-      if(this.getCookie('darkmode') == 'true') {
-        enableDarkMode({
-            brightness: 100,
-            contrast: 90,
-            sepia: 10,
-        })
-      } else {
-        disableDarkMode()
-      }
     },
     /* https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript */
     setCookie(name: string, value: string, days: number | false = false) {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar></NavBar>
     <h1>Ultimi Capitoli</h1>
     
     <div class="album py-5 bg-light">
@@ -39,9 +40,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import NavBar from '../components/NavBar.vue'
 
 export default defineComponent({
   name: 'Home',
+  components: {
+    NavBar
+  },
   data() {
     return {
       data: [],
