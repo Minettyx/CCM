@@ -19,9 +19,9 @@
 
   <div style="position: fixed; width: 100%; left: 0; right: 0; bottom: 10px;">
     <div v-if="!loading" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; transition: visibility 0.25s, opacity 0.25s linear;">
-      <router-link v-if="this.$route.params.id!=manga.chapters[0].chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(-1)" class="cborder" style="padding: 1px 8px; margin-left: auto;"><fai icon='chevron-left' class="fa-lg"/></router-link>
+      <router-link v-if="this.$route.params.id!=manga.chapters[0].chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(-1)" class="cborder" style="padding: 1px 8px; margin-right: auto;"><fai icon='chevron-left' class="fa-lg"/></router-link>
       <input v-if="!data.webtoon" type="range" class="form-range cborder" min="0" :max="data.images.length-1" step="0" v-model="readingpage" style="padding: 10px;">
-      <router-link v-if="this.$route.params.id!=manga.chapters.slice().pop().chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(1)" class="cborder" style="padding: 1px 8px; margin-right: auto;"><fai icon='chevron-right' class="fa-lg"/></router-link>
+      <router-link v-if="this.$route.params.id!=manga.chapters.slice().pop().chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(1)" class="cborder" style="padding: 1px 8px; margin-left: auto;"><fai icon='chevron-right' class="fa-lg"/></router-link>
     </div>
   </div>
 
