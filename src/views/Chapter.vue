@@ -106,7 +106,7 @@ export default defineComponent({
         }
       }
     }
-    this.readdir = this.getCookie('readdir')
+    this.readdir = this.getCookie('readdir') || 'ltr'
   },
   beforeUnmount() {
     window.onkeydown = () => {return}
