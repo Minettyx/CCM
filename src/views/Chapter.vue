@@ -122,7 +122,7 @@ export default defineComponent({
     },
     'readingpage': {
       handler() {
-        history.pushState(history.state, '', '#'+(parseInt(this.readingpage)+1))
+        history.replaceState(history.state, '', '#'+(this.readingpage+1))
       }
     },
     'readdir': {
