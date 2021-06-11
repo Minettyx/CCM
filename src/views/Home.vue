@@ -15,14 +15,14 @@
             <div class="card">
               <div class="row justify-content-md-center g-5">
                 <div class="col-5">
-                  <img :src="manga.manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 12/17'>
+                  <router-link :to="'/manga/'+manga.manga.id"><img :src="manga.manga.cover" class="card-img-top" style='object-fit: cover; aspect-ratio: 12/17'></router-link>
                 </div>
                 <div class="card-body col-7">
-                  <h4 class="card-title" style="font-weight: bold; cursor: pointer; margin-right: 15px"  @click="this.$router.push('/manga/'+manga.manga.id)" >{{manga.manga.title}}</h4>
+                  <router-link :to="'/manga/'+manga.manga.id" style="text-decoration: none; color: black"><h4 class="card-title" style="font-weight: bold; margin-right: 15px">{{manga.manga.title}}</h4></router-link>
                   <table class='table table-borderless'>
                     <tbody>
                       <tr v-for="ch in manga.chapters" :key='ch'>
-                        <th style="text-align: left;"><a @click="this.$router.push('/chapter/'+manga.manga.id+'/'+ch.chapter)" class="link" style='cursor: pointer;'>{{(ch.volume&&viewport>0 ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title&&viewport>3 ? ' - '+ch.title : ''}}</a></th>
+                        <th style="text-align: left"><router-link :to="'/chapter/'+manga.manga.id+'/'+ch.chapter">{{(ch.volume&&viewport>0 ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title&&viewport>3 ? ' - '+ch.title : ''}}</router-link></th>
                         <td style="text-align: right"><span class="text-muted" >{{ $timeSince(new Date(parseInt(ch.time))) }} fa</span></td>
                         <td></td>
                       </tr>

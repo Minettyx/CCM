@@ -15,13 +15,15 @@
         </div>
         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" v-else>
           <div class="col" v-for="o in data" :key="o">
-            <div class="card shadow-sm" style='cursor: pointer;' @click="this.$router.push('/manga/'+o.id)">
-              <img class="bd-placeholder-img card-img-top" style="object-fit: cover; aspect-ratio: 12/17" :src="o.cover" role="img">
+            <router-link :to="'/manga/'+o.id" style="text-decoration: none; color: black">
+              <div class="card shadow-sm">
+                <img class="bd-placeholder-img card-img-top" style="object-fit: cover; aspect-ratio: 12/17" :src="o.cover" role="img">
 
-              <div class="card-body">
-                <h5 class="card-text">{{o.title}}</h5>
+                <div class="card-body">
+                  <h5 class="card-text" >{{o.title}}</h5>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
       </div>

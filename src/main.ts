@@ -21,10 +21,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faSun, faMoon, faChevronRight, faChevronLeft, faArrowLeft,faCog)
 app.component('fai', FontAwesomeIcon)
 
-/* Toaster */
-import Toaster from "@meforma/vue-toaster"
-app.use(Toaster)
-
 /* Urql */
 import urql from '@urql/vue'
 app.use(urql, {

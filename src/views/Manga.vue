@@ -24,7 +24,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">Stato originale: {{ $parseStatus(data.status) }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted" v-if="data.author">Autore: {{ data.author }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted" v-if="data.artist">Artista: {{ data.artist }}</h6>
-                <a @click="this.$router.push('/chapter/'+this.$route.params.id+'/'+data.chapters[0].chapter)" class="btn btn-primary">Leggi</a>
+                <router-link :to="'/chapter/'+this.$route.params.id+'/'+data.chapters[0].chapter" class="btn btn-primary">Leggi</router-link>
               </div>
             </div>
           </div>
@@ -39,10 +39,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr style='cursor: pointer;' @click="this.$router.push('/chapter/'+this.$route.params.id+'/'+ch.chapter)" v-for="ch in data.chapters.slice().reverse()" :key="ch">
-                <th>{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}</th>
-                <th>{{ch.title}}</th>
-                <td>{{ $timeSince(parseInt(ch.time)) }} fa</td>
+              <tr v-for="ch in data.chapters.slice().reverse()" :key="ch">
+                <th style="padding: 0px"><router-link :to="'/chapter/'+this.$route.params.id+'/'+ch.chapter" style="text-decoration: none; color: rgb(33, 37, 41); display: block; padding: 8px">{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}</router-link></th>
+                <th style="padding: 0px"><router-link :to="'/chapter/'+this.$route.params.id+'/'+ch.chapter" style="text-decoration: none; color: rgb(33, 37, 41); display: block; padding: 8px">{{ch.title||'&nbsp;'}}</router-link></th>
+                <td style="padding: 0px"><router-link :to="'/chapter/'+this.$route.params.id+'/'+ch.chapter" style="text-decoration: none; color: rgb(33, 37, 41); display: block; padding: 8px">{{ $timeSince(parseInt(ch.time)) }} fa</router-link></td>
               </tr>
             </tbody>
           </table>
