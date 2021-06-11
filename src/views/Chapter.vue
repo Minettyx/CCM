@@ -1,16 +1,19 @@
 <template>
 <div class="container-fluid">
 
-  <div class="album py-5 bg-light" v-if="loading">
-    <div class="d-flex justify-content-center">
+  <div class="album py-5 bg-light" v-if="loading||error">
+    <div class="d-flex justify-content-center" v-if="loading&&!error">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
+    <div class="d-flex justify-content-center" v-if="error">
+      <h5>{{ error }}</h5>
+    </div>
   </div>
 
   <div style="position: fixed; width: 100%; left: 0; right: 0; top: 10px;">
-    <div v-if="!loading" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; text-align: left; transition: visibility 0.25s, opacity 0.25s linear;">
+    <div v-if="!loading&&!error" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; text-align: left; transition: visibility 0.25s, opacity 0.25s linear;">
       <div style="padding: 6px 10px; border-radius: 100px;" class="cborder"><router-link :to="'/manga/'+this.$route.params.manga"><fai icon='arrow-left' class="fa-lg"/></router-link></div>
       <div style="padding: 7px 7px 2px 7px;" class="cborder"><h6>{{ manga.title }}</h6><small>{{ (data.volume ? 'Vol.'+data.volume+' ' : '') + 'Ch.'+data.chapter }}{{ data.title ? ' - '+data.title : '' }}</small></div>
       <div style="padding: 6px 10px; border-radius: 100px; margin-left: auto;" class="cborder"><a type="button" data-bs-toggle="modal" data-bs-target="#settingsmodal"><fai icon='cog' class="fa-lg"/></a></div>
@@ -18,7 +21,7 @@
   </div>
 
   <div style="position: fixed; width: 100%; left: 0; right: 0; bottom: 10px;">
-    <div v-if="!loading" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; transition: visibility 0.25s, opacity 0.25s linear;">
+    <div v-if="!loading&&!error" class="container" :style="{'opacity': gui ? '1' : '0', 'visibility': gui ? 'visible' : 'hidden'}" style="display: flex; align-items: center; transition: visibility 0.25s, opacity 0.25s linear;">
       <router-link v-if="readdir=='ltr'&&this.$route.params.id!=manga.chapters[0].chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(-1)" class="cborder" style="padding: 1px 8px; margin-right: auto;"><fai icon='chevron-left' class="fa-lg"/></router-link>
       <router-link v-if="readdir=='rtl'&&this.$route.params.id!=manga.chapters.slice().pop().chapter" :to="'/chapter/'+this.$route.params.manga+'/'+getChapter(1)" class="cborder" style="padding: 1px 8px; margin-right: auto;"><fai icon='chevron-left' class="fa-lg"/></router-link>
       <input v-if="!data.webtoon" type="range" class="form-range cborder" min="0" :max="data.images.length-1" step="0" v-model="readingpage" style="padding: 10px;" :style="{ 'direction': readdir }">
@@ -27,7 +30,7 @@
     </div>
   </div>
 
-  <div class="row" v-if="!loading">
+  <div class="row" v-if="!loading&&!error">
     <div class="col-0 col-lg-1 col-xl-2"></div>
     <div class="col-12 col-lg-10 col-xl-8" style="padding: 0px">
       <div>
@@ -89,6 +92,7 @@ export default defineComponent({
       data: {} as IChapter,
       manga: {} as IManga,
       loading: true,
+      error: false as string | false,
       readingpage: 0,
       loadlimit: 0,
       loadedimages: [] as number[],
@@ -98,24 +102,31 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.getdata()
+    this.getdata(() => {
 
-    /** array keys to navigate */
-    // eslint-disable-next-line
-    window.onkeydown = (e: any) => {
-      if(!this.loading) {
-        if (e.key == 'ArrowLeft') {
-          this.readleft()
-        } else if(e.key == 'ArrowRight') {
-          this.readright()
+      /** get current paga from hash if exist */
+      const hashpage = parseInt(location.hash.substring(1))
+      if(hashpage) {
+        this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
+      } else if(location.hash.substring(1) == 'last') {
+        this.readingpage = this.data.images.length-1
+      }
+
+      /** array keys to navigate */
+      // eslint-disable-next-line
+      window.onkeydown = (e: any) => {
+        if(!this.loading) {
+          if (e.key == 'ArrowLeft') {
+            this.readleft()
+          } else if(e.key == 'ArrowRight') {
+            this.readright()
+          }
         }
       }
-    }
 
-
-    /** getting reading direction from cookie */
-    // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
-    this.readdir = this.$getCookie('readdir') || 'ltr'
+      /** getting reading direction from cookie */
+      this.readdir = this.$getCookie('readdir') || 'ltr'
+    })
   },
   beforeUnmount() {
     /** remove events */
@@ -133,20 +144,13 @@ export default defineComponent({
     /** update cokkie on reading diractiuon change */
     'readdir': {
       handler() {
-        // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
         this.$setCookie('readdir', this.readdir, 36500)
       }
-    },
-
-    /** error handling */
-    'error'() {
-      // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
-      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
     }
   },
   methods: {
     /* Fetch data from the api */
-    getdata() {
+    getdata(callback?: () => void) {
       this.readingpage = 0
       this.loadlimit = 0
       this.loading = true
@@ -178,23 +182,22 @@ export default defineComponent({
         }
       })
 
-      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
-      // eslint-disable-next-line
-      function finish(v: any) {
-        v.data = result.data.value.chapter;
+      const finish = () => {
+        this.error = result.data.value.chapter===null ? 'Capitolo non trovato' : false
+        if(this.error) return
+
+        this.data = result.data.value.chapter;
         for (let i = 0; i < result.data.value.chapter.images.length; i++) {
-          v.loadedimages[i] = 0;
+          this.loadedimages[i] = 0;
         }
-        v.manga = result.data.value.chapter.manga
-        v.loading = false
-        v.error = result.error
-        const hashpage = parseInt(location.hash.substring(1))
-        if(hashpage) {
-          v.readingpage = (hashpage>=1&&hashpage<=v.data.images.length ? hashpage : 1)-1
-        } else if(location.hash.substring(1) == 'last') {
-          v.readingpage = v.data.images.length-1
-        }
+        this.manga = result.data.value.chapter.manga
+
+        /** onyl call if defined */
+        callback && callback()
+
+        this.loading = false
       }
+      if(result.data.value){finish()}else{result.then(()=>{finish()})}
     },
 
     /** get chapter relative to the current one */

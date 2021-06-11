@@ -8,7 +8,10 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="container" v-if="!loading">
+    <div class="d-flex justify-content-center" v-else-if="error">
+      <h5>{{ error }}</h5>
+    </div>
+    <div class="container" v-else>
       <div class="row justify-content-md-center">
         <div class="col-lg-3">
           <div class="card sticky-top" style="top: 70px; z-index: 0">
@@ -54,6 +57,7 @@
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import { useQuery } from '@urql/vue';
+import { IManga } from '@/interfaces/apidata';
 
 export default defineComponent({
   name: 'Archive',
@@ -62,16 +66,9 @@ export default defineComponent({
   },
   data() {
     return {
-      data: {},
+      data: {} as IManga,
       loading: true,
-      // eslint-disable-next-line
-      errore: undefined
-    }
-  },
-  watch: {
-    'error'() {
-      // @ts-expect-error: $toast actually exist
-      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
+      error: false as string | false
     }
   },
   mounted() {
@@ -101,17 +98,16 @@ export default defineComponent({
           }
         `,
         variables: {
-          "id": this.$route.params.id
+          "id": [this.$route.params.id].join()
         }
       })
 
-      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
-      // eslint-disable-next-line
-      function finish(v: any) {
-        v.loading =  false
-        v.data = result.data.value.manga
-        v.error = result.error
+      const finish = () => {
+        this.error = result.data.value.manga===null ? 'Manga non trovato' : false
+        this.data = this.error ? this.data : result.data.value.manga
+        this.loading =  false
       }
+      if(result.data.value){finish()}else{result.then(()=>{finish()})}
     }
   }
 })

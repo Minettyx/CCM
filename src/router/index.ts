@@ -20,6 +20,10 @@ const routes = [
     path: '/chapter/:manga/:id',
     name: 'Chapter',
     component: () => import('../views/Chapter.vue')
+  },
+  {
+    path: '/:catchAll(.*)',
+    component: () => import('../views/NotFound.vue')
   }
 ]
 

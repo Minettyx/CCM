@@ -4,7 +4,7 @@ export default {
   install: (app: App<Element>): void => {
 
     /* Calculate the "x ... ago" string from a data */
-    app.config.globalProperties.$timeSince = (date: Date | string | number) => {
+    app.config.globalProperties.$timeSince = (date: Date | string | number): string => {
 
       const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
 
@@ -72,7 +72,7 @@ export default {
     }
 
     /* https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript */
-    app.config.globalProperties.$setCookie = (name: string, value: string, days: number | false = false) => {
+    app.config.globalProperties.$setCookie = (name: string, value: string, days: number | false = false): void => {
       let expires = "";
       if (days) {
         const date = new Date();
@@ -81,7 +81,7 @@ export default {
       }
       document.cookie = name + "=" + (value || "")  + expires + "; path=/";
     },
-    app.config.globalProperties.$getCookie = (name: string) => {
+    app.config.globalProperties.$getCookie = (name: string): string | null => {
         const nameEQ = name + "=";
         const ca = document.cookie.split(';');
         for(let i=0;i < ca.length;i++) {
@@ -91,5 +91,14 @@ export default {
         }
         return null;
     }
+  }
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $getCookie: (name: string) => string | null
+    $setCookie: (name: string, value: string, days: number | false) => void
+    $parseStatus: (val: number) => string
+    $timeSince: (date: Date | string | number) => string
   }
 }

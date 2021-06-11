@@ -10,7 +10,7 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        <div class="row g-3" v-if="!loading">
+        <div class="row g-3" v-else>
           <div class="col-12 col-lg-6" v-for="manga in data" :key="manga">
             <div class="card">
               <div class="row justify-content-md-center g-5">
@@ -51,15 +51,8 @@ export default defineComponent({
   },
   data() {
     return {
-      data: [] as IChapter[],
-      loading: true,
-      error: undefined
-    }
-  },
-  watch: {
-    'error'() {
-      // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
-      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
+      data: [] as { manga: IManga; chapters: IChapter[]; }[],
+      loading: true
     }
   },
   mounted() {
@@ -87,13 +80,11 @@ export default defineComponent({
         `
       })
 
-      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
-      // eslint-disable-next-line
-      function finish(v: any) {
-        v.loading =  false
-        v.data = v.groupData(result.data.value.chapters)
-        v.error = result.error
+      const finish = () => {
+        this.data = this.groupData(result.data.value.chapters)
+        this.loading =  false
       }
+      if(result.data.value){finish()}else{result.then(()=>{finish()})}
     },
 
     /** group the data to be used in the home */

@@ -10,7 +10,10 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" v-if="!loading">
+        <div class="d-flex justify-content-center" v-else-if="error">
+          <h5>{{ error }}</h5>
+        </div>
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" v-else>
           <div class="col" v-for="o in data" :key="o">
             <div class="card shadow-sm" style='cursor: pointer;' @click="this.$router.push('/manga/'+o.id)">
               <img class="bd-placeholder-img card-img-top" style="object-fit: cover; aspect-ratio: 12/17" :src="o.cover" role="img">
@@ -31,6 +34,7 @@
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import { useQuery } from '@urql/vue';
+import { IManga } from '@/interfaces/apidata';
 
 export default defineComponent({
   name: 'Archive',
@@ -39,15 +43,9 @@ export default defineComponent({
   },
   data() {
     return {
-      data: {},
+      data: {} as IManga[],
       loading: true,
-      error: undefined
-    }
-  },
-  watch: {
-    'error'() {
-      // @ts-expect-error: $toast actually exist
-      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
+      error: false as string | false
     }
   },
   mounted() {
@@ -68,17 +66,16 @@ export default defineComponent({
           }
         `,
         variables: {
-          title: (this.$route.query.title||'')
+          title: [this.$route.query.title].join()
         }
       })
 
-      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
-      // eslint-disable-next-line
-      function finish(v: any) {
-        v.loading =  false
-        v.data = result.data.value.mangas
-        v.error = result.error
+      const finish = () => {
+        this.error = result.data.value.mangas.length==0 ? 'Nessun risultato' : false
+        this.data = this.error ? this.data : result.data.value.mangas
+        this.loading =  false
       }
+      if(result.data.value){finish()}else{result.then(()=>{finish()})}
     }
   }
 })
