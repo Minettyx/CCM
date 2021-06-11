@@ -12,7 +12,7 @@
       </ul>
 
       <ul class="nav col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 justify-content-center">
-        <li><a href="" class="nav-link px-2 link-dark" style='cursor: pointer;' @click="switchmode()"><fai :icon="getCookie('darkmode') == 'true' ? 'sun' : 'moon'"/></a></li>
+        <li><a href="" class="nav-link px-2 link-dark" style='cursor: pointer;' @click="switchmode()"><fai :icon="$getCookie('darkmode') == 'true' ? 'sun' : 'moon'"/></a></li>
         <li>
           <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))">
             <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
@@ -46,35 +46,12 @@ export default defineComponent({
   },
   methods: {
     switchmode() {
-      if(this.getCookie('darkmode') == 'true') {
-        this.setCookie('darkmode', 'false', 36500)
+      if(this.$getCookie('darkmode') == 'true') {
+        this.$setCookie('darkmode', 'false', 36500)
       } else {
-        this.setCookie('darkmode', 'true', 36500)
+        this.$setCookie('darkmode', 'true', 36500)
       }
       this.$router.push('')
-    },
-    /* https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript */
-    setCookie(name: string, value: string, days: number | false = false) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-    },
-    getCookie(name: string) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-        }
-        return null;
-    },
-    eraseCookie(name: string) {   
-        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
   }
 });

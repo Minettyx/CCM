@@ -91,14 +91,18 @@ export default {
         }
         return null;
     }
+    app.config.globalProperties.$eraseCookie = (name: string): void => {   
+      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
   }
 }
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $getCookie: (name: string) => string | null
-    $setCookie: (name: string, value: string, days: number | false) => void
-    $parseStatus: (val: number) => string
     $timeSince: (date: Date | string | number) => string
+    $parseStatus: (val: number) => string
+    $setCookie: (name: string, value: string, days: number | false) => void
+    $getCookie: (name: string) => string | null
+    $eraseCookie: (name: string) => void
   }
 }

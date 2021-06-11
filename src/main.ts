@@ -5,7 +5,6 @@ import router from './router'
 const app = createApp(App)
 app.use(router)
 
-
 /* Axios */
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -32,6 +31,7 @@ app.use(urql, {
   url: 'https://graphql.ccmscans.in/'
 })
 
+/* my plugins */
 import functions from './plugins/functions'
 app.use(functions)
 import viewport from './plugins/viewport'

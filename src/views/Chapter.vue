@@ -115,12 +115,10 @@ export default defineComponent({
       /** array keys to navigate */
       // eslint-disable-next-line
       window.onkeydown = (e: any) => {
-        if(!this.loading) {
-          if (e.key == 'ArrowLeft') {
-            this.readleft()
-          } else if(e.key == 'ArrowRight') {
-            this.readright()
-          }
+        if (e.key == 'ArrowLeft') {
+          this.readleft()
+        } else if(e.key == 'ArrowRight') {
+          this.readright()
         }
       }
 
@@ -229,24 +227,40 @@ export default defineComponent({
         this.realprevious()
       }
     },
-    /** go to the next page */
+    /** go to the next page or next chapter */
     realnext() {
-      if(this.readingpage != this.data.images.length-1) {
-        this.readingpage++
-      } else if(this.$route.params.id!=this.manga.chapters.slice().pop()?.chapter) {
-        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
+      if(!this.data.webtoon) {
+        if(this.readingpage != this.data.images.length-1) {
+          this.readingpage++
+        } else if(this.$route.params.id!=this.manga.chapters.slice().pop()?.chapter) {
+          this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
+        } else {
+          this.$router.push('/manga/'+this.$route.params.manga)
+        }
       } else {
-        this.$router.push('/manga/'+this.$route.params.manga)
+        if(this.$route.params.id!=this.manga.chapters.slice().pop()?.chapter) {
+          this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
+        } else {
+          this.$router.push('/manga/'+this.$route.params.manga)
+        }
       }
     },
-    /** go to the previous page */
+    /** go to the previous page or previous chapter */
     realprevious() {
-      if(this.readingpage != 0) {
-        this.readingpage--
-      } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
-        this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1)+'#last')
+      if(!this.data.webtoon) {
+        if(this.readingpage != 0) {
+          this.readingpage--
+        } else if(this.$route.params.id!=this.manga.chapters[0].chapter) {
+          this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1)+'#last')
+        } else {
+          this.$router.push('/manga/'+this.$route.params.manga)
+        }
       } else {
-        this.$router.push('/manga/'+this.$route.params.manga)
+        if(this.$route.params.id!=this.manga.chapters[0].chapter) {
+          this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(-1)+'#last')
+        } else {
+          this.$router.push('/manga/'+this.$route.params.manga)
+        }
       }
     },
     /** update the next image to be loadded */
