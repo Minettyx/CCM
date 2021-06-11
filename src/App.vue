@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view :key="$route.fullPath" style="text-align: center;"/>
 </template>
 
 <script lang="ts">
@@ -39,9 +39,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style>
-#app {
-  text-align: center;
-}
-</style>

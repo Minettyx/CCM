@@ -18,7 +18,7 @@
               </div>
               <div class="card-body col-6 col-lg-12">
                 <h4 class="card-title" style="font-weight: bold;">{{ data.title }}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Stato originale: {{ parseStatus(data.status) }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Stato originale: {{ $parseStatus(data.status) }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted" v-if="data.author">Autore: {{ data.author }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted" v-if="data.artist">Artista: {{ data.artist }}</h6>
                 <a @click="this.$router.push('/chapter/'+this.$route.params.id+'/'+data.chapters[0].chapter)" class="btn btn-primary">Leggi</a>
@@ -39,7 +39,7 @@
               <tr style='cursor: pointer;' @click="this.$router.push('/chapter/'+this.$route.params.id+'/'+ch.chapter)" v-for="ch in data.chapters.slice().reverse()" :key="ch">
                 <th>{{ (ch.volume ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter }}</th>
                 <th>{{ch.title}}</th>
-                <td>{{ timeSince(ch.time) }} fa</td>
+                <td>{{ $timeSince(parseInt(ch.time)) }} fa</td>
               </tr>
             </tbody>
           </table>
@@ -50,9 +50,10 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
+import { useQuery } from '@urql/vue';
 
 export default defineComponent({
   name: 'Archive',
@@ -61,95 +62,55 @@ export default defineComponent({
   },
   data() {
     return {
-      data: {chapters: []},
-      loading: true
+      data: {},
+      loading: true,
+      // eslint-disable-next-line
+      errore: undefined
+    }
+  },
+  watch: {
+    'error'() {
+      // @ts-expect-error: $toast actually exist
+      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
     }
   },
   mounted() {
     this.getdata()
   },
   methods: {
+    /* Fetch data from the api */
     getdata() {
-      this.loading = true;
-      this.axios
-      .get('https://api.ccmscans.in/manga/'+this.$route.params.id)
-      .then(response => {
-        this.data = response.data;
-        this.loading = false;
+      this.loading = true
+      let result = useQuery({
+        query: `
+          query ($id: String!) {
+            manga(id: $id) {
+              id
+              title
+              cover
+              status
+              author
+              artist
+              chapters {
+                chapter
+                volume
+                title
+                time
+              }
+            }
+          }
+        `,
+        variables: {
+          "id": this.$route.params.id
+        }
       })
-      .catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
-        {
-          position:"bottom-right",
-          duration: 5000,
-          maxToasts: 1
-        })
-      })
-    },
-    parseStatus(val) {
-      switch (val) {
-        case 1:
-          return 'In corso'
-        case 2:
-          return 'Finito'
-        case 3:
-          return 'Cancellato'
-        case 4:
-          return 'In Stallo'
-        default:
-          return ''
-      }
-    },
-    timeSince(date) {
 
-      var seconds = Math.floor((new Date() - new Date(date)) / 1000);
-
-      var interval = seconds / 31536000;
-
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " anno";
-        } else {
-          return Math.floor(interval) + " anni";
-        }
-      }
-      interval = seconds / 2592000;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " mese";
-        } else {
-          return Math.floor(interval) + " mesi";
-        }
-      }
-      interval = seconds / 86400;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " giorno";
-        } else {
-          return Math.floor(interval) + " giorni";
-        }
-      }
-      interval = seconds / 3600;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " ora";
-        } else {
-          return Math.floor(interval) + " ore";
-        }
-      }
-      interval = seconds / 60;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " minuto";
-        } else {
-          return Math.floor(interval) + " minuti";
-        }
-      }
-      if(Math.floor(interval) == 1) {
-        return Math.floor(interval) + " secondo";
-      } else {
-        return Math.floor(interval) + " secondi";
+      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
+      // eslint-disable-next-line
+      function finish(v: any) {
+        v.loading =  false
+        v.data = result.data.value.manga
+        v.error = result.error
       }
     }
   }

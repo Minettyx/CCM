@@ -77,19 +77,21 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
+import { useQuery } from '@urql/vue';
+import { IManga, IChapter } from '../interfaces/apidata'
 
 export default defineComponent({
   name: 'Archive',
   data() {
     return {
-      data: {},
-      manga: {},
+      data: {} as IChapter,
+      manga: {} as IManga,
       loading: true,
       readingpage: 0,
       loadlimit: 0,
-      loadedimages: [],
+      loadedimages: [] as number[],
       firsttoload: 0,
       gui: true,
       readdir: 'ltr'
@@ -97,73 +99,106 @@ export default defineComponent({
   },
   mounted() {
     this.getdata()
-    window.onkeydown = (e) => {
+
+    /** array keys to navigate */
+    // eslint-disable-next-line
+    window.onkeydown = (e: any) => {
       if(!this.loading) {
         if (e.key == 'ArrowLeft') {
-          this.readprevious()
+          this.readleft()
         } else if(e.key == 'ArrowRight') {
-          this.readnext()
+          this.readright()
         }
       }
     }
-    this.readdir = this.getCookie('readdir') || 'ltr'
+
+
+    /** getting reading direction from cookie */
+    // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
+    this.readdir = this.$getCookie('readdir') || 'ltr'
   },
   beforeUnmount() {
+    /** remove events */
     window.onkeydown = () => {return}
   },
+
   watch: {
-    '$route.params.id': {
-      handler() {
-        if(this.$route.path.includes('/chapter')) {
-          this.getdata()
-        }
-      },
-      deep: true
-    },
+    /** update hash on page change */
     'readingpage': {
       handler() {
         history.replaceState(history.state, '', '#'+(this.readingpage+1))
       }
     },
+
+    /** update cokkie on reading diractiuon change */
     'readdir': {
       handler() {
-        this.setCookie('readdir', this.readdir, 36500)
+        // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
+        this.$setCookie('readdir', this.readdir, 36500)
       }
+    },
+
+    /** error handling */
+    'error'() {
+      // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
+      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
     }
   },
   methods: {
+    /* Fetch data from the api */
     getdata() {
       this.readingpage = 0
       this.loadlimit = 0
-      this.loading = true;
-      this.axios
-      .get('https://api.ccmscans.in/chapter/'+this.$route.params.manga+'/'+this.$route.params.id+'?mangainfo=1')
-      .then(response => {
-        this.data = response.data;
-        for (let i = 0; i < response.data.images.length; i++) {
-          this.loadedimages[i] = 0;
+      this.loading = true
+      let result = useQuery({
+        query: `
+          query($manga: String!, $chapter: String!) {
+            chapter(manga: $manga, chapter: $chapter) {
+              chapter
+              volume
+              title
+              manga {
+                id
+                title
+                cover
+                chapters {
+                  chapter
+                  volume
+                  title
+                }
+              }
+              webtoon
+              images
+            }
+          }
+        `,
+        variables: {
+          manga: this.$route.params.manga,
+          chapter: this.$route.params.id
         }
-        this.manga = response.data.manga
-        this.loading = false
+      })
+
+      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
+      // eslint-disable-next-line
+      function finish(v: any) {
+        v.data = result.data.value.chapter;
+        for (let i = 0; i < result.data.value.chapter.images.length; i++) {
+          v.loadedimages[i] = 0;
+        }
+        v.manga = result.data.value.chapter.manga
+        v.loading = false
+        v.error = result.error
         const hashpage = parseInt(location.hash.substring(1))
         if(hashpage) {
-          this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
+          v.readingpage = (hashpage>=1&&hashpage<=v.data.images.length ? hashpage : 1)-1
         } else if(location.hash.substring(1) == 'last') {
-          this.readingpage = this.data.images.length-1
+          v.readingpage = v.data.images.length-1
         }
-        
-      })
-      .catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
-        {
-          position:"bottom-right",
-          duration: 5000,
-          maxToasts: 1
-        })
-      })
+      }
     },
-    getChapter(val) {
+
+    /** get chapter relative to the current one */
+    getChapter(val: number) {
       var i = 0;
       var res = ''
       this.manga.chapters.forEach(el => {
@@ -174,29 +209,34 @@ export default defineComponent({
       })
       return res
     },
-    readnext() {
+
+    /** go to the page to the right */
+    readright() {
       if(this.readdir == 'rtl') {
         this.realprevious()
       } else {
         this.realnext()
       }
     },
-    readprevious() {
+    /** go to the page to the left */
+    readleft() {
       if(this.readdir == 'rtl') {
         this.realnext()
       } else {
         this.realprevious()
       }
     },
+    /** go to the next page */
     realnext() {
       if(this.readingpage != this.data.images.length-1) {
         this.readingpage++
-      } else if(this.$route.params.id!=this.manga.chapters.slice().pop().chapter) {
+      } else if(this.$route.params.id!=this.manga.chapters.slice().pop()?.chapter) {
         this.$router.push('/chapter/'+this.$route.params.manga+'/'+this.getChapter(1))
       } else {
         this.$router.push('/manga/'+this.$route.params.manga)
       }
     },
+    /** go to the previous page */
     realprevious() {
       if(this.readingpage != 0) {
         this.readingpage--
@@ -206,6 +246,7 @@ export default defineComponent({
         this.$router.push('/manga/'+this.$route.params.manga)
       }
     },
+    /** update the next image to be loadded */
     updatefirsttoload() {
       for(let i = this.readingpage; i < this.loadedimages.length; i++) {
         if(this.loadedimages[i] == 0) {
@@ -214,39 +255,22 @@ export default defineComponent({
         }
       }
     },
-    afterimageload(page) {
+    /** load next image after one has loaded */
+    afterimageload(page: string) {
       this.loadedimages[this.data.images.indexOf(page)] = 1;
       this.updatefirsttoload();
     },
-    imageclick(e) {
+    /** calculate witch side of the image you clicked */
+    // eslint-disable-next-line
+    imageclick(e: any) {
       const width = e.target.getBoundingClientRect().width
       if(e.pageX-(screen.width-width)/2 > width/3*2) {
-        this.readnext()
+        this.readright()
       } else if(e.pageX-(screen.width-width)/2 < width/3) {
-        this.readprevious()
+        this.readleft()
       } else {
         this.gui = !this.gui
       }
-    },
-    /* https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript */
-    setCookie(name, value, days = false) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-    },
-    getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-        }
-        return null;
     }
   }
 })

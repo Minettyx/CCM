@@ -15,15 +15,15 @@
             <div class="card">
               <div class="row justify-content-md-center g-5">
                 <div class="col-5">
-                  <img :src="manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 12/17'>
+                  <img :src="manga.manga.cover" class="card-img-top" alt="..." @click="this.$router.push('/manga/'+manga.manga.id)" style='cursor: pointer; object-fit: cover; aspect-ratio: 12/17'>
                 </div>
                 <div class="card-body col-7">
-                  <h4 class="card-title" style="font-weight: bold; cursor: pointer; margin-right: 15px"  @click="this.$router.push('/manga/'+manga.id)" >{{manga.title}}</h4>
+                  <h4 class="card-title" style="font-weight: bold; cursor: pointer; margin-right: 15px"  @click="this.$router.push('/manga/'+manga.manga.id)" >{{manga.manga.title}}</h4>
                   <table class='table table-borderless'>
                     <tbody>
                       <tr v-for="ch in manga.chapters" :key='ch'>
-                        <th style="text-align: left;"><a @click="this.$router.push('/chapter/'+manga.id+'/'+ch.chapter)" class="link" style='cursor: pointer;'>{{(ch.volume&&viewport>0 ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title&&viewport>3 ? ' - '+ch.title : ''}}</a></th>
-                        <td style="text-align: right"><span class="text-muted" >{{timeSince(ch.time)}} fa</span></td>
+                        <th style="text-align: left;"><a @click="this.$router.push('/chapter/'+manga.manga.id+'/'+ch.chapter)" class="link" style='cursor: pointer;'>{{(ch.volume&&viewport>0 ? 'Vol.'+ch.volume+' ' : '') + 'Ch.'+ch.chapter}}{{ch.title&&viewport>3 ? ' - '+ch.title : ''}}</a></th>
+                        <td style="text-align: right"><span class="text-muted" >{{ $timeSince(new Date(parseInt(ch.time))) }} fa</span></td>
                         <td></td>
                       </tr>
                     </tbody>
@@ -38,9 +38,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
+import { useQuery } from '@urql/vue';
+import { IManga, IChapter } from '../interfaces/apidata'
 
 export default defineComponent({
   name: 'Home',
@@ -49,98 +51,70 @@ export default defineComponent({
   },
   data() {
     return {
-      data: [],
+      data: [] as IChapter[],
       loading: true,
-      viewport: ''
+      error: undefined
+    }
+  },
+  watch: {
+    'error'() {
+      // @ts-expect-error: $toast actually exist, there's probably something set up incorrectly but i don't know
+      this.$toast.error("Errore durante il recupero dei dati, prova a ricaricare la pagina",{position:"bottom-right",duration:5000,maxToasts:1})
     }
   },
   mounted() {
-    this.getdata();
-    this.updateViewport();
-    window.addEventListener('resize', () => {
-      this.updateViewport();
-    });
+    this.getdata()
   },
   methods: {
+    /* Fetch data from the api */
     getdata() {
-      this.loading = true;
-      this.axios
-      .get('https://api.ccmscans.in/chapters?sort=time&limit=20&grouped=1')
-      .then(response => {
-        this.data = response.data;
-        this.loading = false;
+      this.loading = true
+      let result = useQuery({
+        query: `
+          {
+            chapters(limit: 20) {
+              chapter
+              volume
+              title
+              time
+              manga {
+                id
+                title
+                cover
+              }
+            }
+          }
+        `
       })
-      .catch(() => {
-        this.$toast.error(
-        "Errore durante il recupero dei dati, prova a ricaricare la pagina",
-        {
-          position:"bottom-right",
-          duration: 5000,
-          maxToasts: 1
+
+      if(result.data.value){finish(this)}else{result.then(()=>{finish(this)})}
+      // eslint-disable-next-line
+      function finish(v: any) {
+        v.loading =  false
+        v.data = v.groupData(result.data.value.chapters)
+        v.error = result.error
+      }
+    },
+
+    /** group the data to be used in the home */
+    groupData(data: IChapter[]) {
+      let res: {manga: IManga, chapters: IChapter[]}[] = []
+      data.forEach(ch => {
+        let index = -1;
+        let i = 0;
+        res.forEach(test => {
+          if(test.manga.id === ch.manga.id) {
+            index = i;
+          }
+          i++
         })
+        if(index === -1) {
+          res.push({manga: ch.manga, chapters: [ch]})
+        } else {
+          res[index].chapters.push(ch)
+        }
       })
-    },
-    timeSince(date) {
-
-      var seconds = Math.floor((new Date() - new Date(date)) / 1000);
-
-      var interval = seconds / 31536000;
-
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " anno";
-        } else {
-          return Math.floor(interval) + " anni";
-        }
-      }
-      interval = seconds / 2592000;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " mese";
-        } else {
-          return Math.floor(interval) + " mesi";
-        }
-      }
-      interval = seconds / 86400;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " giorno";
-        } else {
-          return Math.floor(interval) + " giorni";
-        }
-      }
-      interval = seconds / 3600;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " ora";
-        } else {
-          return Math.floor(interval) + " ore";
-        }
-      }
-      interval = seconds / 60;
-      if (interval > 1) {
-        if(Math.floor(interval) == 1) {
-          return Math.floor(interval) + " minuto";
-        } else {
-          return Math.floor(interval) + " minuti";
-        }
-      }
-      if(Math.floor(interval) == 1) {
-        return Math.floor(interval) + " secondo";
-      } else {
-        return Math.floor(interval) + " secondi";
-      }
-    },
-    updateViewport() {
-      const width = Math.max(
-        document.documentElement.clientWidth,
-        window.innerWidth || 0
-      )
-      if (width <= 576) { this.viewport = 0 }
-      else if (width <= 768) { this.viewport =1 }
-      else if (width <= 992) { this.viewport = 2 }
-      else if (width <= 1200) { this.viewport = 3 }
-      else { this.viewport = 4 }
+      return res
     }
   }
 })
