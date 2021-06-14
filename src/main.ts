@@ -24,7 +24,7 @@ app.component('fai', FontAwesomeIcon)
 /* Urql */
 import urql from '@urql/vue'
 app.use(urql, {
-  url: 'https://graphql.ccmscans.in/'
+  url: 'https://api.ccmscans.in/graphql'
 })
 
 /* my plugins */
