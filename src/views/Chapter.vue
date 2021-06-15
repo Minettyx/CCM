@@ -83,7 +83,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useQuery } from '@urql/vue';
-import { Manga, Chapter } from '../types'
+import { Manga, Chapter } from '@/types'
 
 export default defineComponent({
   name: 'Archive',
@@ -148,11 +148,11 @@ export default defineComponent({
   },
   methods: {
     /* Fetch data from the api */
-    getdata(callback?: () => void) {
+    async getdata(callback?: () => void) {
       this.readingpage = 0
       this.loadlimit = 0
       this.loading = true
-      let result = useQuery({
+      const data = await this.$onQueryFinish(useQuery({
         query: `
           query($manga: String!, $chapter: String!) {
             chapter(manga: $manga, chapter: $chapter) {
@@ -178,24 +178,20 @@ export default defineComponent({
           manga: this.$route.params.manga,
           chapter: this.$route.params.id
         }
-      })
+      }))
+      
+      this.error = data.chapter===null ? 'Capitolo non trovato' : false
+      if(!data.chapter) return
 
-      const finish = () => {
-        this.error = result.data.value.chapter===null ? 'Capitolo non trovato' : false
-        if(this.error) return
-
-        this.data = result.data.value.chapter;
-        for (let i = 0; i < result.data.value.chapter.images.length; i++) {
-          this.loadedimages[i] = 0;
-        }
-        this.manga = result.data.value.chapter.manga
-
-        /** onyl call if defined */
-        callback && callback()
-
-        this.loading = false
+      this.data = data.chapter;
+      for (let i = 0; i < data.chapter.images.length; i++) {
+        this.loadedimages[i] = 0;
       }
-      if(result.data.value){finish()}else{result.then(()=>{finish()})}
+      this.manga = data.chapter.manga
+
+      /** onyl call if defined */
+      callback && callback()
+      this.loading = false
     },
 
     /** get chapter relative to the current one */

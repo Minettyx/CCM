@@ -1,3 +1,5 @@
+import { Query } from "@/types";
+import { UseQueryResponse } from "@urql/vue";
 import { App } from "vue"
 
 export default {
@@ -94,6 +96,19 @@ export default {
     app.config.globalProperties.$eraseCookie = (name: string): void => {   
       document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
+
+    // eslint-disable-next-line
+    app.config.globalProperties.$onQueryFinish = (query: UseQueryResponse<any, any>): Promise<Query> => {
+      return new Promise<Query>((resolve) => {
+        if(query.data.value) {
+          resolve(query.data.value)
+        } else {
+          query.then(() => {
+            resolve(query.data.value)
+          })
+        }
+      })
+    }
   }
 }
 
@@ -104,5 +119,7 @@ declare module '@vue/runtime-core' {
     $setCookie: (name: string, value: string, days: number | false) => void
     $getCookie: (name: string) => string | null
     $eraseCookie: (name: string) => void
+    // eslint-disable-next-line
+    $onQueryFinish: (query: UseQueryResponse<any, any>) => Promise<Query>
   }
 }

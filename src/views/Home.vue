@@ -40,9 +40,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import NavBar from '../components/NavBar.vue'
+import NavBar from '@/components/NavBar.vue'
 import { useQuery } from '@urql/vue';
-import { Manga, Chapter } from '../types'
+import { Manga, Chapter } from '@/types'
 
 export default defineComponent({
   name: 'Home',
@@ -60,9 +60,9 @@ export default defineComponent({
   },
   methods: {
     /* Fetch data from the api */
-    getdata() {
+    async getdata(callback?: () => void) {
       this.loading = true
-      let result = useQuery({
+      const data = await this.$onQueryFinish(useQuery({
         query: `
           {
             chapters(limit: 20) {
@@ -78,13 +78,11 @@ export default defineComponent({
             }
           }
         `
-      })
-
-      const finish = () => {
-        this.data = this.groupData(result.data.value.chapters)
-        this.loading =  false
-      }
-      if(result.data.value){finish()}else{result.then(()=>{finish()})}
+      }))
+      this.data = this.groupData(data.chapters)
+      /** onyl call if defined */
+      callback && callback()
+      this.loading = false
     },
 
     /** group the data to be used in the home */
