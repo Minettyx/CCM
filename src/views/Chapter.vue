@@ -104,7 +104,7 @@ export default defineComponent({
   mounted() {
     this.getdata(() => {
 
-      /** get current paga from hash if exist */
+      /** get current page from hash if exist */
       const hashpage = parseInt(location.hash.substring(1))
       if(hashpage) {
         this.readingpage = (hashpage>=1&&hashpage<=this.data.images.length ? hashpage : 1)-1
@@ -112,23 +112,16 @@ export default defineComponent({
         this.readingpage = this.data.images.length-1
       }
 
-      /** array keys to navigate */
-      // eslint-disable-next-line
-      window.onkeydown = (e: any) => {
-        if (e.key == 'ArrowLeft') {
-          this.readleft()
-        } else if(e.key == 'ArrowRight') {
-          this.readright()
-        }
-      }
+      /** arrow keys to navigate */
+      window.addEventListener('keydown',this.onKeyDown)
 
       /** getting reading direction from cookie */
       this.readdir = this.$getCookie('readdir') || 'ltr'
     })
   },
   beforeUnmount() {
-    /** remove events */
-    window.onkeydown = () => {return}
+    /** remove event listeners */
+    window.removeEventListener('keydown', this.onKeyDown)
   },
 
   watch: {
@@ -139,13 +132,14 @@ export default defineComponent({
       }
     },
 
-    /** update cokkie on reading diractiuon change */
+    /** update cookie on reading direction change */
     'readdir': {
       handler() {
         this.$setCookie('readdir', this.readdir, 36500)
       }
     }
   },
+
   methods: {
     /* Fetch data from the api */
     async getdata(callback?: () => void) {
@@ -274,8 +268,7 @@ export default defineComponent({
       this.updatefirsttoload();
     },
     /** calculate witch side of the image you clicked */
-    // eslint-disable-next-line
-    imageclick(e: any) {
+    imageclick(e: any) { // eslint-disable-line
       const width = e.target.getBoundingClientRect().width
       if(e.pageX-(screen.width-width)/2 > width/3*2) {
         this.readright()
@@ -283,6 +276,15 @@ export default defineComponent({
         this.readleft()
       } else {
         this.gui = !this.gui
+      }
+    },
+
+    /** arrow keys to navigate */
+    onKeyDown(e: any) { // eslint-disable-line
+      if (e.key == 'ArrowLeft') {
+        this.readleft()
+      } else if(e.key == 'ArrowRight') {
+        this.readright()
       }
     }
   }

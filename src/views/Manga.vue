@@ -76,7 +76,7 @@ export default defineComponent({
   },
   methods: {
     /* Fetch data from the api */
-    async getdata() {
+    async getdata(callback?: () => void) {
       this.loading = true
       const data = await this.$onQueryFinish(useQuery({
         query: `
@@ -104,6 +104,8 @@ export default defineComponent({
 
       this.error = data.manga===null ? 'Manga non trovato' : false
       this.data = this.error||!data.manga ? this.data : data.manga
+      /** onyl call if defined */
+      callback && callback()
       this.loading =  false
     }
   }

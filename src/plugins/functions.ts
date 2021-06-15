@@ -5,7 +5,7 @@ import { App } from "vue"
 export default {
   install: (app: App<Element>): void => {
 
-    /* Calculate the "x ... ago" string from a data */
+    /* Calculate the "x ... ago" string from a date */
     app.config.globalProperties.$timeSince = (date: Date | string | number): string => {
 
       const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
@@ -119,7 +119,6 @@ declare module '@vue/runtime-core' {
     $setCookie: (name: string, value: string, days: number | false) => void
     $getCookie: (name: string) => string | null
     $eraseCookie: (name: string) => void
-    // eslint-disable-next-line
-    $onQueryFinish: (query: UseQueryResponse<any, any>) => Promise<Query>
+    $onQueryFinish: (query: UseQueryResponse<any, any>) => Promise<Query> // eslint-disable-line
   }
 }
