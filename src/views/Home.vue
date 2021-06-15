@@ -42,7 +42,7 @@
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import { useQuery } from '@urql/vue';
-import { IManga, IChapter } from '../interfaces/apidata'
+import { Manga, Chapter } from '../types'
 
 export default defineComponent({
   name: 'Home',
@@ -51,7 +51,7 @@ export default defineComponent({
   },
   data() {
     return {
-      data: [] as { manga: IManga; chapters: IChapter[]; }[],
+      data: [] as { manga: Manga; chapters: Chapter[]; }[],
       loading: true
     }
   },
@@ -88,8 +88,8 @@ export default defineComponent({
     },
 
     /** group the data to be used in the home */
-    groupData(data: IChapter[]) {
-      let res: {manga: IManga, chapters: IChapter[]}[] = []
+    groupData(data: Chapter[]) {
+      let res: {manga: Manga, chapters: Chapter[]}[] = []
       data.forEach(ch => {
         let index = -1;
         let i = 0;

@@ -83,14 +83,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useQuery } from '@urql/vue';
-import { IManga, IChapter } from '../interfaces/apidata'
+import { Manga, Chapter } from '../types'
 
 export default defineComponent({
   name: 'Archive',
   data() {
     return {
-      data: {} as IChapter,
-      manga: {} as IManga,
+      data: {} as Chapter,
+      manga: {} as Manga,
       loading: true,
       error: false as string | false,
       readingpage: 0,

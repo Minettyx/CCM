@@ -57,7 +57,7 @@
 import { defineComponent } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import { useQuery } from '@urql/vue';
-import { IManga } from '@/interfaces/apidata';
+import { Manga } from '../types';
 
 export default defineComponent({
   name: 'Archive',
@@ -66,7 +66,7 @@ export default defineComponent({
   },
   data() {
     return {
-      data: {} as IManga,
+      data: {} as Manga,
       loading: true,
       error: false as string | false
     }
