@@ -98,7 +98,7 @@ export default defineComponent({
       loadedimages: [] as number[],
       firsttoload: 0,
       gui: true,
-      readdir: 'ltr'
+      readdir: localStorage.readdir || 'ltr'
     }
   },
   mounted() {
@@ -114,9 +114,6 @@ export default defineComponent({
 
       /** arrow keys to navigate */
       window.addEventListener('keydown',this.onKeyDown)
-
-      /** getting reading direction from cookie */
-      this.readdir = this.$getCookie('readdir') || 'ltr'
     })
   },
   beforeUnmount() {
@@ -132,10 +129,10 @@ export default defineComponent({
       }
     },
 
-    /** update cookie on reading direction change */
+    /** update localstorage on reading direction change */
     'readdir': {
       handler() {
-        this.$setCookie('readdir', this.readdir, 36500)
+        localStorage.readdir = this.readdir
       }
     }
   },

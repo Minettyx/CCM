@@ -32,5 +32,7 @@ import functions from './plugins/functions'
 app.use(functions)
 import viewport from './plugins/viewport'
 app.use(viewport)
+import darkmode from './plugins/darkmode'
+app.use(darkmode)
 
 app.mount('#app')

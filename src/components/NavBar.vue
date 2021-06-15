@@ -1,5 +1,5 @@
 <template>
-<header class="p-1 mb-3 border-bottom bg-white" :class="{'sticky-top': width>=992}">
+<header class="p-1 mb-3 border-bottom bg-white" :class="{'sticky-top': viewport>=3}">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
@@ -12,7 +12,7 @@
       </ul>
 
       <ul class="nav col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 justify-content-center">
-        <li><a href="" class="nav-link px-2 link-dark" style='cursor: pointer;' @click="switchmode()"><fai :icon="$getCookie('darkmode') == 'true' ? 'sun' : 'moon'"/></a></li>
+        <li><a class="nav-link px-2 link-dark" style='cursor: pointer;' @click="darkmode = !darkmode"><fai :icon="darkmode ? 'sun' : 'moon'"/></a></li>
         <li>
           <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))">
             <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
@@ -29,30 +29,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'NavBar',
-  data() {
-    return {
-      search: '',
-      width: window.innerWidth
-    }
-  },
-  mounted() {
-    window.onresize = () => {
-      this.width = window.innerWidth
-    }
-  },
-  beforeUnmount() {
-    window.onresize = () => {return}
-  },
-  methods: {
-    switchmode() {
-      if(this.$getCookie('darkmode') == 'true') {
-        this.$setCookie('darkmode', 'false', 36500)
-      } else {
-        this.$setCookie('darkmode', 'true', 36500)
-      }
-      this.$router.push('')
-    }
-  }
+  name: 'NavBar'
 });
 </script>
