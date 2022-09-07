@@ -1,0 +1,145 @@
+[{
+	"_id": {
+		"$oid": "605c42905162f39721c62f25"
+	},
+	"id": "danberu-nan-kiro-moteru",
+	"__v": 0,
+	"artist": "Maam",
+	"author": "Yabako Sandrovich",
+	"cover": "https://cdn.ccmscans.in/mangas/danberu-nan-kiro-moteru/cover.jpg",
+	"status": 1,
+	"title": "Dumbbell Nan Kilo Moteru?"
+},
+{
+	"_id": {
+		"$oid": "605c42905162f39721c62f4d"
+	},
+	"id": "jojos-bizarre-adventure-part-6-stone-ocean-official-colored",
+	"__v": 0,
+	"artist": "Araki Hirohiko",
+	"author": "Araki Hirohiko",
+	"cover": "https://cdn.ccmscans.in/mangas/jojos-bizarre-adventure-part-6-stone-ocean-official-colored/cover.jpg",
+	"status": 2,
+	"title": "JoJo's Bizarre Adventure Part 6 - Stone Ocean (Official Colored)"
+},
+{
+	"_id": {
+		"$oid": "605c42905162f39721c62f56"
+	},
+	"id": "shishunki-chan-no-shitsukekata",
+	"__v": 0,
+	"artist": "Nakata Yumi",
+	"author": "Nakata Yumi",
+	"cover": "https://cdn.ccmscans.in/mangas/shishunki-chan-no-shitsukekata/cover.jpg",
+	"status": 1,
+	"title": "Shishunki-chan no Shitsukekata"
+},
+{
+	"_id": {
+		"$oid": "605c42905162f39721c62f74"
+	},
+	"id": "hedgehog-harry",
+	"__v": 0,
+	"artist": "Muramatsu Matsuri",
+	"author": "Muramatsu Matsuri",
+	"cover": "https://cdn.ccmscans.in/mangas/hedgehog-harry/cover.jpg",
+	"status": 2,
+	"title": "Hedgehog Harry"
+},
+{
+	"_id": {
+		"$oid": "605c42905162f39721c62f79"
+	},
+	"id": "tejina-senpai",
+	"__v": 0,
+	"artist": "Azu",
+	"author": "Azu",
+	"cover": "https://cdn.ccmscans.in/mangas/tejina-senpai/cover.jpg",
+	"status": 2,
+	"title": "Tejina Senpai"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c62fe6"
+	},
+	"id": "tadokoro-san-web-comic",
+	"__v": 0,
+	"artist": "Tatsubon",
+	"author": "Tatsubon",
+	"cover": "https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/cover.jpg",
+	"status": 1,
+	"title": "Tadokoro-san (Web Comic)"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c62ff5"
+	},
+	"id": "kubo-san-wa-boku-mobu-wo-yurusanai",
+	"__v": 0,
+	"artist": "Yukimori Nene",
+	"author": "Yukimori Nene",
+	"cover": "https://cdn.ccmscans.in/mangas/kubo-san-wa-boku-mobu-wo-yurusanai/cover.jpg",
+	"status": 1,
+	"title": "Kubo-san wa Boku (Mobu) wo Yurusanai"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c63005"
+	},
+	"id": "pseudo-harem",
+	"__v": 0,
+	"artist": "Saitou Yuu",
+	"author": "Saitou Yuu",
+	"cover": "https://cdn.ccmscans.in/mangas/pseudo-harem/cover.jpg",
+	"status": 2,
+	"title": "Pseudo Harem"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c6301c"
+	},
+	"id": "minecraft-anime-edition-doujinshi",
+	"__v": 0,
+	"artist": "ErMao Wu",
+	"author": "Reon Merryweatherey",
+	"cover": "https://cdn.ccmscans.in/mangas/minecraft-anime-edition-doujinshi/cover.jpg",
+	"status": 1,
+	"title": "Minecraft - Anime Edition (Doujinshi)"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c63027"
+	},
+	"id": "senpai-ga-uzai-kouhai-no-hanashi",
+	"__v": 0,
+	"artist": "Shiro Manta",
+	"author": "Shiro Manta",
+	"cover": "https://cdn.ccmscans.in/mangas/senpai-ga-uzai-kouhai-no-hanashi/cover.jpg",
+	"status": 1,
+	"title": "Senpai ga Uzai Kouhai no Hanashi"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c63059"
+	},
+	"id": "shoujo-shuumatsu-ryokou",
+	"__v": 0,
+	"artist": "Tsukumizu",
+	"author": "Tsukumizu",
+	"cover": "https://cdn.ccmscans.in/mangas/shoujo-shuumatsu-ryokou/cover.jpg",
+	"status": 2,
+	"title": "Shoujo Shuumatsu Ryokou"
+},
+{
+	"_id": {
+		"$oid": "605c42915162f39721c6305f"
+	},
+	"id": "hotarubi-no-mori-e",
+	"__v": 0,
+	"artist": "Midorikawa Yuki",
+	"author": "Midorikawa Yuki",
+	"cover": "https://cdn.ccmscans.in/mangas/hotarubi-no-mori-e/cover.jpg",
+	"status": 2,
+	"title": "Hotarubi no Mori e"
+}]
+

@@ -41,7 +41,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import NavBar from '@/components/NavBar.vue'
-import { useQuery } from '@urql/vue';
+// import { useQuery } from '@urql/vue';
 import { Manga, Chapter } from '@/types'
 
 export default defineComponent({
@@ -62,23 +62,9 @@ export default defineComponent({
     /* Fetch data from the api */
     async getdata(callback?: () => void) {
       this.loading = true
-      const data = await this.$onQueryFinish(useQuery({
-        query: `
-          {
-            chapters(limit: 20) {
-              chapter
-              volume
-              title
-              time
-              manga {
-                id
-                title
-                cover
-              }
-            }
-          }
-        `
-      }))
+      const data = {
+        chapters: (await this.axios.get('/api/latest.json')).data
+      }
       this.data = this.groupData(data.chapters)
       /** onyl call if defined */
       callback && callback()

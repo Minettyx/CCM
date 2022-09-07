@@ -22,10 +22,10 @@ library.add(faSun, faMoon, faChevronRight, faChevronLeft, faArrowLeft,faCog)
 app.component('fai', FontAwesomeIcon)
 
 /* Urql */
-import urql from '@urql/vue'
-app.use(urql, {
-  url: 'https://api.ccmscans.in/graphql'
-})
+// import urql from '@urql/vue'
+// app.use(urql, {
+//   url: 'https://api.ccmscans.in/graphql'
+// })
 
 /* my plugins */
 import functions from './plugins/functions'

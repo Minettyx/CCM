@@ -13,11 +13,11 @@
 
       <ul class="nav col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 justify-content-center">
         <li><a class="nav-link px-2 link-dark" style='cursor: pointer;' @click="darkmode = !darkmode"><fai :icon="darkmode ? 'sun' : 'moon'"/></a></li>
-        <li>
+        <!-- <li>
           <form @submit.prevent="this.$router.push('/archive'+(search?'?title='+search:''))">
             <input v-model="search" type="search" class="form-control" placeholder="Cerca...">
           </form>
-        </li>
+        </li> -->
       </ul>
 
     </div>

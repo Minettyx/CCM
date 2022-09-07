@@ -1,5 +1,5 @@
-import { Query } from "@/types";
-import { UseQueryResponse } from "@urql/vue";
+// import { Query } from "@/types";
+// import { UseQueryResponse } from "@urql/vue";
 import { App } from "vue"
 
 export default {
@@ -98,17 +98,17 @@ export default {
     }
 
     // eslint-disable-next-line
-    app.config.globalProperties.$onQueryFinish = (query: UseQueryResponse<any, any>): Promise<Query> => {
-      return new Promise<Query>((resolve) => {
-        if(query.data.value) {
-          resolve(query.data.value)
-        } else {
-          query.then(() => {
-            resolve(query.data.value)
-          })
-        }
-      })
-    }
+    // app.config.globalProperties.$onQueryFinish = (query: UseQueryResponse<any, any>): Promise<Query> => {
+    //   return new Promise<Query>((resolve) => {
+    //     if(query.data.value) {
+    //       resolve(query.data.value)
+    //     } else {
+    //       query.then(() => {
+    //         resolve(query.data.value)
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 
@@ -119,6 +119,6 @@ declare module '@vue/runtime-core' {
     $setCookie: (name: string, value: string, days: number | false) => void
     $getCookie: (name: string) => string | null
     $eraseCookie: (name: string) => void
-    $onQueryFinish: (query: UseQueryResponse<any, any>) => Promise<Query> // eslint-disable-line
+    // $onQueryFinish: (query: UseQueryResponse<any, any>) => Promise<Query> // eslint-disable-line
   }
 }

@@ -82,7 +82,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useQuery } from '@urql/vue';
+// import { useQuery } from '@urql/vue';
 import { Manga, Chapter } from '@/types'
 
 export default defineComponent({
@@ -143,33 +143,10 @@ export default defineComponent({
       this.readingpage = 0
       this.loadlimit = 0
       this.loading = true
-      const data = await this.$onQueryFinish(useQuery({
-        query: `
-          query($manga: String!, $chapter: String!) {
-            chapter(manga: $manga, chapter: $chapter) {
-              chapter
-              volume
-              title
-              manga {
-                id
-                title
-                cover
-                chapters {
-                  chapter
-                  volume
-                  title
-                }
-              }
-              webtoon
-              images
-            }
-          }
-        `,
-        variables: {
-          manga: this.$route.params.manga,
-          chapter: this.$route.params.id
-        }
-      }))
+      const data = {
+        chapter: (await this.axios.get(`/api/chapter/${this.$route.params.manga}/${this.$route.params.id}.json`)).data
+      }
+
       
       this.error = data.chapter===null ? 'Capitolo non trovato' : false
       if(!data.chapter) return

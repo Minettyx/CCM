@@ -56,7 +56,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import NavBar from '@/components/NavBar.vue'
-import { useQuery } from '@urql/vue';
+// import { useQuery } from '@urql/vue';
 import { Manga } from '@/types';
 
 export default defineComponent({
@@ -78,29 +78,9 @@ export default defineComponent({
     /* Fetch data from the api */
     async getdata(callback?: () => void) {
       this.loading = true
-      const data = await this.$onQueryFinish(useQuery({
-        query: `
-          query ($id: String!) {
-            manga(id: $id) {
-              id
-              title
-              cover
-              status
-              author
-              artist
-              chapters {
-                chapter
-                volume
-                title
-                time
-              }
-            }
-          }
-        `,
-        variables: {
-          "id": [this.$route.params.id].join()
-        }
-      }))
+      const data = {
+        manga: (await this.axios.get(`/api/manga/${[this.$route.params.id].join()}.json`)).data
+      }
 
       this.error = data.manga===null ? 'Manga non trovato' : false
       this.data = this.error||!data.manga ? this.data : data.manga
