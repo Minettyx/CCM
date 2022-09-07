@@ -1,6 +1,9 @@
 "use strict";
 exports.__esModule = true;
 var fs_1 = require("fs");
+if (!fs_1.existsSync("./public/api/manga/")) {
+    fs_1.mkdirSync("./public/api/manga/", { recursive: true });
+}
 var chapters = JSON.parse(fs_1.readFileSync('./src/db/chapters.json', 'utf8')).map(function (e) {
     return {
         title: e.title,

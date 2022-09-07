@@ -1,6 +1,10 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { Chapter, Manga } from './src/types'
 
+if (!existsSync(`./public/api/manga/`)){
+    mkdirSync(`./public/api/manga/`, { recursive: true });
+}
+
 const chapters: Chapter[] = JSON.parse(readFileSync('./src/db/chapters.json', 'utf8')).map(e => {
     return {
         title: e.title,
