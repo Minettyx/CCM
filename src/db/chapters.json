@@ -6862,5 +6862,68 @@
 		"$date": "2021-04-09T19:39:15.465Z"
 	},
 	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "65982c34f1d27a05f10ed3a9"
+	},
+	"title": "",
+	"volume": "",
+	"webtoon": false,
+	"images": [
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/1.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/2.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/3.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/4.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/5.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/6.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/81/7.png"
+	],
+	"chapter": "81",
+	"manga": "tadokoro-san-web-comic",
+	"time": {
+		"$date": "2021-07-17T12:42:05Z"
+	},
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "65982c34f1d27a05f10ed3aa"
+	},
+	"title": "",
+	"volume": "",
+	"webtoon": false,
+	"images": [
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/82/1.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/82/2.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/82/3.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/82/4.png"
+	],
+	"chapter": "82",
+	"manga": "tadokoro-san-web-comic",
+	"time": {
+		"$date": "2021-09-02T20:17:25Z"
+	},
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "65982c34f1d27a05f10ed3ab"
+	},
+	"title": "",
+	"volume": "",
+	"webtoon": false,
+	"images": [
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/83/1.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/83/2.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/83/3.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/83/4.png",
+		"https://cdn.ccmscans.in/mangas/tadokoro-san-web-comic/83/5.png"
+	],
+	"chapter": "83",
+	"manga": "tadokoro-san-web-comic",
+	"time": {
+		"$date": "2021-09-02T20:18:30Z"
+	},
+	"__v": 0
 }]
-
